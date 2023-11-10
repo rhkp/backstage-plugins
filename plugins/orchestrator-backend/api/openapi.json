@@ -1,0 +1,37 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Test API",
+    "description": "Test API description",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7007/orchestrator"
+    }
+  ],
+  "paths": {
+    "/getTest": {
+      "get": {
+        "description": "this is a test",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/getTestA": {
+      "get": {
+        "description": "this is a test A ",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "201"
+          }
+        }
+      }
+    }
+  }
+}
