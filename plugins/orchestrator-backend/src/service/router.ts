@@ -124,6 +124,7 @@ export async function createBackendRouter(
 
   setupInternalRoutes(
     router,
+    api,
     args.sonataFlowService,
     workflowService,
     openApiService,
@@ -159,6 +160,7 @@ function initDataIndexService(logger: Logger, config: Config) {
 // ======================================================
 function setupInternalRoutes(
   router: express.Router,
+  api: OpenAPIBackend,
   sonataFlowService: SonataFlowService,
   workflowService: WorkflowService,
   openApiService: OpenApiService,
@@ -169,22 +171,29 @@ function setupInternalRoutes(
     response.json(ApiResponseBuilder.SUCCESS_RESPONSE(swfs));
   });
 
-  router.get('/workflows/overview', async (_, res) => {
-    const overviews = await sonataFlowService.fetchWorkflowOverviews();
+  api.register(
+    'getWorkflowsOverview',
+    async (c, req: express.Request, res: express.Response) => {
+      const overviews = await sonataFlowService.fetchWorkflowOverviews();
 
-    if (!overviews) {
-      res.status(500).send("Couldn't fetch workflow overviews");
-      return;
-    }
+      if (!overviews) {
+        res.status(500).send("Couldn't fetch workflow overviews");
+        return;
+      }
 
-    const result: WorkflowOverviewListResult = {
-      items: overviews,
-      limit: 0,
-      offset: 0,
-      totalCount: overviews?.length ?? 0,
-    };
-    res.status(200).json(result);
-  });
+      const result: WorkflowOverviewListResult = {
+        overviews: overviews,
+        paginationInfo: {
+          limit: 0,
+          offset: 0,
+          totalCount: overviews?.length ?? 0,
+        },
+      };
+      console.log('List overview wf:', result);
+
+      res.status(200).json(result);
+    },
+  );
 
   router.get('/workflows', async (_, res) => {
     const definitions = await sonataFlowService.fetchWorkflows();
