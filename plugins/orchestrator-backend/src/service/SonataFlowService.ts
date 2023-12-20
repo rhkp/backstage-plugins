@@ -572,7 +572,7 @@ export class SonataFlowService {
       uri: await this.fetchWorkflowUri(workflowId),
       lastTriggeredMs: lastTriggered.getTime(),
       lastRunStatus,
-      type: getWorkflowCategory(definition),
+      category: getWorkflowCategory(definition),
       avgDurationMs: counter ? totalDuration / counter : undefined,
       description: definition.description,
     };

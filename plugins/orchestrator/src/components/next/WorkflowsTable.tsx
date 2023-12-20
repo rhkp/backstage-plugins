@@ -32,6 +32,7 @@ import {
   nextExecuteWorkflowRouteRef,
   workflowDefinitionsRouteRef,
 } from '../../routes';
+import { firstLetterCapital } from '../../utils';
 import { ProcessInstanceStatus } from './ProcessInstanceStatus';
 
 export interface WorkflowsTableProps {
@@ -150,7 +151,10 @@ export const WorkflowsTable = ({ items }: WorkflowsTableProps) => {
           </Link>
         ),
       },
-      { title: 'Type', field: 'type' },
+      {
+        title: 'Category',
+        render: rowData => firstLetterCapital(rowData.category),
+      },
       { title: 'Last run', field: 'lastTriggered' },
       {
         title: 'Last run status',
