@@ -7,6 +7,7 @@ import { JsonObject, JsonValue } from '@backstage/types';
 import express from 'express';
 import Router from 'express-promise-router';
 import { JSONSchema7 } from 'json-schema';
+import { OpenAPIBackend } from 'openapi-backend';
 import { Logger } from 'winston';
 
 import {
@@ -17,6 +18,8 @@ import {
   WorkflowListResult,
   WorkflowOverviewListResult,
 } from '@janus-idp/backstage-plugin-orchestrator-common';
+
+import path from 'path';
 
 import { RouterArgs } from '../routerWrapper';
 import { ApiResponseBuilder } from '../types/apiResponse';
@@ -37,6 +40,39 @@ export async function createBackendRouter(
   const { eventBroker, config, logger, discovery, catalogApi, urlReader } =
     args;
 
+  // FIXME: what is it the proper way to get the path?
+  const openapiFolderPath = path.join(
+    process.cwd(),
+    '..',
+    '..',
+    'plugins',
+    'orchestrator-backend',
+    'api',
+  );
+  const api = new OpenAPIBackend({
+    definition: path.join(openapiFolderPath, 'openapi.yaml'),
+    strict: false,
+    ajvOpts: {
+      strict: false,
+      strictSchema: false,
+      verbose: true,
+      addUsedSchema: false,
+    },
+    handlers: {
+      validationFail: async (
+        c,
+        req: express.Request,
+        res: express.Response,
+      ) => {
+        console.log('validationFail', c.operation);
+        res.status(400).json({ err: c.validation.errors });
+      },
+      notFound: async (c, req: express.Request, res: express.Response) =>
+        res.status(404).json({ err: 'not found' }),
+      notImplemented: async (c, req: express.Request, res: express.Response) =>
+        res.status(500).json({ err: 'not implemented' }),
+    },
+  });
   const router = Router();
   router.use(express.json());
   router.use('/workflows', express.text());
@@ -101,6 +137,8 @@ export async function createBackendRouter(
     topic: orchestrator_service_ready_topic,
     eventPayload: {},
   });
+
+  api.init();
 
   router.use(errorHandler());
   return router;

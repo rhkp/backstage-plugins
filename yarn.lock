@@ -35,6 +35,17 @@
     call-me-maybe "^1.0.1"
     js-yaml "^4.1.0"
 
+"@apidevtools/json-schema-ref-parser@^11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-11.1.0.tgz#0608ed1ba47c377c6732e7185f2ea06731b58fde"
+  integrity sha512-g/VW9ZQEFJAOwAyUb8JFf7MLiLy2uEB4rU270rGzDwICxnxMlPy0O11KVePSgS36K1NI29gSlK84n5INGhd4Ag==
+  dependencies:
+    "@jsdevtools/ono" "^7.1.3"
+    "@types/json-schema" "^7.0.13"
+    "@types/lodash.clonedeep" "^4.5.7"
+    js-yaml "^4.1.0"
+    lodash.clonedeep "^4.5.0"
+
 "@apidevtools/json-schema-ref-parser@^9.0.6", "@apidevtools/json-schema-ref-parser@^9.1.2":
   version "9.1.2"
   resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-9.1.2.tgz#8ff5386b365d4c9faa7c8b566ff16a46a577d9b8"
@@ -12966,7 +12977,7 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.14.tgz#74a97a5573980802f32c8e47b663530ab3b6b7d1"
   integrity sha512-U3PUjAudAdJBeC2pgN8uTIKgxrb4nlDF3SF0++EldXQvQBGkpFZMSnwQiIoDU77tv45VgNkl/L4ouD+rEomujw==
 
-"@types/json-schema@^7.0.0":
+"@types/json-schema@^7.0.0", "@types/json-schema@^7.0.13":
   version "7.0.15"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
@@ -13001,6 +13012,18 @@
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-3.0.4.tgz#def6a9bb0ce78140860602f16ace37a9997f086a"
   integrity sha512-hPpIeeHb/2UuCw06kSNAOVWgehBLXEo0/fUs0mw3W2qhqX89PI2yvok83MnuctYGCPrabGIoi0fFso4DQ+sNUQ==
+
+"@types/lodash.clonedeep@^4.5.7":
+  version "4.5.9"
+  resolved "https://registry.yarnpkg.com/@types/lodash.clonedeep/-/lodash.clonedeep-4.5.9.tgz#ea48276c7cc18d080e00bb56cf965bcceb3f0fc1"
+  integrity sha512-19429mWC+FyaAhOLzsS8kZUsI+/GmBAQ0HFiCPsKGU+7pBXOQWhyrY6xNNDwUSX8SMZMJvuFVMF9O5dQOlQK9Q==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.202"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.202.tgz#f09dbd2fb082d507178b2f2a5c7e74bd72ff98f8"
+  integrity sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==
 
 "@types/lodash@4.14.200", "@types/lodash@^4.14.175":
   version "4.14.200"
@@ -14164,7 +14187,7 @@ ajv-formats-draft2019@^1.6.1:
     smtp-address-parser "^1.0.3"
     uri-js "^4.4.1"
 
-ajv-formats@^2.1.1:
+ajv-formats@^2.0.2, ajv-formats@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ajv-formats/-/ajv-formats-2.1.1.tgz#6e669400659eb74973bbf2e33327180a0996b520"
   integrity sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==
@@ -14193,7 +14216,7 @@ ajv@^6.10.0, ajv@^6.10.1, ajv@^6.12.2, ajv@^6.12.3, ajv@^6.12.4, ajv@^6.12.5, aj
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.1.0, ajv@^8.10.0, ajv@^8.11.0, ajv@^8.11.2, ajv@^8.12.0, ajv@^8.9.0:
+ajv@^8.0.0, ajv@^8.1.0, ajv@^8.10.0, ajv@^8.11.0, ajv@^8.11.2, ajv@^8.12.0, ajv@^8.6.2, ajv@^8.9.0:
   version "8.12.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.12.0.tgz#d1a0527323e22f53562c567c00991577dfbe19d1"
   integrity sha512-sRu1kpcO9yLtYxBKvqfTeh9KzZEwO3STyX1HT+4CaDzC6HpTGYhIhPIzj9XuKU7KYDwnaeh5hcOwjy1QuJzBPA==
@@ -15008,6 +15031,11 @@ batch@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
   integrity sha512-x+VAiMRL6UPkx+kudNvxTl6hB2XNNCG2r+7wixVfIYwu/2HKRXimwQyaumLjMveWvT2Hkd/cAJw+QBMfJ/EKVw==
+
+bath-es5@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/bath-es5/-/bath-es5-3.0.3.tgz#4e2808e8b33b4a5e3328ec1e9032f370f042193d"
+  integrity sha512-PdCioDToH3t84lP40kUFCKWCOCH389Dl1kbC8FGoqOwamxsmqxxnJSXdkTOsPoNHXjem4+sJ+bbNoQm5zeCqxg==
 
 bcrypt-pbkdf@^1.0.0, bcrypt-pbkdf@^1.0.2:
   version "1.0.2"
@@ -16410,7 +16438,7 @@ cookie@0.4.2, cookie@^0.4.2:
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.2.tgz#0e41f24de5ecf317947c82fc789e06a884824432"
   integrity sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==
 
-cookie@0.5.0, cookie@~0.5.0:
+cookie@0.5.0, cookie@^0.5.0, cookie@~0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
   integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
@@ -17514,6 +17542,11 @@ dequal@^2.0.0, dequal@^2.0.2, dequal@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
+
+dereference-json-schema@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/dereference-json-schema/-/dereference-json-schema-0.2.1.tgz#fcad3c98e0116f7124b0989d39d947fa318cae09"
+  integrity sha512-uzJsrg225owJyRQ8FNTPHIuBOdSzIZlHhss9u6W8mp7jJldHqGuLv9cULagP/E26QVJDnjtG8U7Dw139mM1ydA==
 
 des.js@^1.0.0:
   version "1.1.0"
@@ -23324,7 +23357,7 @@ lodash.memoize@^4.1.2:
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==
 
-lodash.merge@^4.6.2:
+lodash.merge@^4.6.1, lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
@@ -24528,6 +24561,13 @@ mock-fs@5.2.0:
   resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-5.2.0.tgz#3502a9499c84c0a1218ee4bf92ae5bf2ea9b2b5e"
   integrity sha512-2dF2R6YMSZbpip1V1WHKGLNjr/k48uQClqMVb5H3MOvwc9qhYis3/IWbj02qIg/Y8MDXKFF4c5v0rxx2o6xTZw==
 
+mock-json-schema@^1.0.7:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/mock-json-schema/-/mock-json-schema-1.1.1.tgz#35cf35ae16e519986ff83c22b4a886a8fe5b9ba5"
+  integrity sha512-YV23vlsLP1EEOy0EviUvZTluXjLR+rhMzeayP2rcDiezj3RW01MhOSQkbQskdtg0K2fnGas5LKbSXgNjAOSX4A==
+  dependencies:
+    lodash "^4.17.21"
+
 modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
@@ -25519,6 +25559,22 @@ open@^8.0.0, open@^8.0.4, open@^8.0.9, open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
+openapi-backend@^5.10.5:
+  version "5.10.5"
+  resolved "https://registry.yarnpkg.com/openapi-backend/-/openapi-backend-5.10.5.tgz#344905d7db0dcddbec827e9aa3e8dc8e7089b0a7"
+  integrity sha512-ivZfL0Lwj7rRctCqxAquGy4j/VcdUXUvDsEVM3NG/2jDuvYT2dS+sf9ntGo5vv4hkOnkWgPnR6HxHp7NPexqAA==
+  dependencies:
+    "@apidevtools/json-schema-ref-parser" "^11.1.0"
+    ajv "^8.6.2"
+    bath-es5 "^3.0.3"
+    cookie "^0.5.0"
+    dereference-json-schema "^0.2.1"
+    lodash "^4.17.15"
+    mock-json-schema "^1.0.7"
+    openapi-schema-validator "^12.0.0"
+    openapi-types "^12.0.2"
+    qs "^6.9.3"
+
 openapi-sampler@^1.2.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/openapi-sampler/-/openapi-sampler-1.3.1.tgz#eebb2a1048f830cc277398bc8022b415f887e859"
@@ -25527,7 +25583,17 @@ openapi-sampler@^1.2.1:
     "@types/json-schema" "^7.0.7"
     json-pointer "0.6.2"
 
-openapi-types@^12.1.3:
+openapi-schema-validator@^12.0.0:
+  version "12.1.3"
+  resolved "https://registry.yarnpkg.com/openapi-schema-validator/-/openapi-schema-validator-12.1.3.tgz#c9234af67b00cdbbecfdd4eb546d7006bacfe518"
+  integrity sha512-xTHOmxU/VQGUgo7Cm0jhwbklOKobXby+/237EG967+3TQEYJztMgX9Q5UE2taZKwyKPUq0j11dngpGjUuxz1hQ==
+  dependencies:
+    ajv "^8.1.0"
+    ajv-formats "^2.0.2"
+    lodash.merge "^4.6.1"
+    openapi-types "^12.1.3"
+
+openapi-types@^12.0.2, openapi-types@^12.1.3:
   version "12.1.3"
   resolved "https://registry.yarnpkg.com/openapi-types/-/openapi-types-12.1.3.tgz#471995eb26c4b97b7bd356aacf7b91b73e777dd3"
   integrity sha512-N4YtSYJqghVu4iek2ZUvcN/0aqH1kRDuNqzcycDxhOUpg7GdvLa2F3DgS6yBNhInhv2r/6I0Flkn7CqL8+nIcw==
@@ -27189,7 +27255,7 @@ qs@6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
-qs@^6.10.0, qs@^6.10.1, qs@^6.10.2, qs@^6.11.0, qs@^6.11.2, qs@^6.4.0, qs@^6.9.1, qs@^6.9.4:
+qs@^6.10.0, qs@^6.10.1, qs@^6.10.2, qs@^6.11.0, qs@^6.11.2, qs@^6.4.0, qs@^6.9.1, qs@^6.9.3, qs@^6.9.4:
   version "6.11.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.2.tgz#64bea51f12c1f5da1bc01496f48ffcff7c69d7d9"
   integrity sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA==
