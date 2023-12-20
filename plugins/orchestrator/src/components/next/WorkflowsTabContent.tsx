@@ -27,11 +27,11 @@ export const WorkflowsTabContent = () => {
   const navigate = useNavigate();
   const newWorkflowLink = useRouteRef(newWorkflowRef);
   const { value, error, loading } = useAsync(async (): Promise<
-    WorkflowOverview[]
+    WorkflowOverview[] | undefined
   > => {
     const data = await orchestratorApi.listWorkflowsOverview();
 
-    return data.items;
+    return data.overviews;
   }, []);
 
   const isReady = React.useMemo(() => !loading && !error, [loading, error]);

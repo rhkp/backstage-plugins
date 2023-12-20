@@ -31,12 +31,12 @@ export interface MockOrchestratorApiData {
     OrchestratorApi['getWorkflowDataInputSchema']
   >;
   listWorkflowsResponse: ReturnType<OrchestratorApi['listWorkflows']>;
-  listWorkflowsOverviewResponse: ReturnType<
-    OrchestratorApi['listWorkflowsOverview']
-  >;
-  getWorkflowOverviewResponse: ReturnType<
-    OrchestratorApi['getWorkflowOverview']
-  >;
+  listWorkflowsOverviewResponse:
+    | ReturnType<OrchestratorApi['listWorkflowsOverview']>
+    | undefined;
+  getWorkflowOverviewResponse:
+    | ReturnType<OrchestratorApi['getWorkflowOverview']>
+    | undefined;
 }
 
 export class MockOrchestratorClient implements OrchestratorApi {
