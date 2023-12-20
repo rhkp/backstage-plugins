@@ -4,6 +4,10 @@
  */
 
 export interface paths {
+  '/workflows/{workflowId}/overview': {
+    /** @description Get a workflow overview by ID */
+    get: operations['getWorkflowOverviewById'];
+  };
   '/workflows/overview': {
     /** @description Get a list of workflow overviews */
     get: operations['getWorkflowsOverview'];
@@ -48,6 +52,49 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+  /** @description Get a workflow overview by ID */
+  getWorkflowOverviewById: {
+    parameters: {
+      path: {
+        /** @description Unique identifier of the workflow */
+        workflowId: string;
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        content: {
+          'application/json': {
+            /** @description Average duration of workflow runs */
+            avgDurationMs?: number;
+            /** @description Workflow description */
+            description?: string;
+            /** @description Status of the last workflow run */
+            lastRunStatus?: string;
+            /** @description Timestamp of the last workflow execution */
+            lastTriggeredMs?: number;
+            /** @description Name of the workflow */
+            name?: string;
+            /** @description Type of the workflow */
+            type?: string;
+            /** @description URI of the workflow */
+            uri?: string;
+            /** @description Workflow identifier */
+            workflowId?: string;
+          };
+        };
+      };
+      /** @description Error fetching workflow overview */
+      500: {
+        content: {
+          'application/json': {
+            /** @description Error message */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
   /** @description Get a list of workflow overviews */
   getWorkflowsOverview: {
     responses: {

@@ -36,6 +36,59 @@ paths:
                   message:
                     type: string
                     description: Error message
+  /workflows/{workflowId}/overview:
+    get:
+      operationId: getWorkflowOverviewById
+      description: Get a workflow overview by ID
+      parameters:
+        - name: workflowId
+          in: path
+          required: true
+          description: Unique identifier of the workflow
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  workflowId:
+                    type: string
+                    description: Workflow identifier
+                  description:
+                    type: string
+                    description: Workflow description
+                  lastRunStatus:
+                    type: string
+                    description: Status of the last workflow run
+                  lastTriggeredMs:
+                    type: integer
+                    description: Timestamp of the last workflow execution
+                  uri:
+                    type: string
+                    description: URI of the workflow
+                  name:
+                    type: string
+                    description: Name of the workflow
+                  type:
+                    type: string
+                    description: Type of the workflow
+                  avgDurationMs:
+                    type: integer
+                    description: Average duration of workflow runs
+        500:
+          description: Error fetching workflow overview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
 components:
   schemas:
     WorkflowOverviewListResult:
