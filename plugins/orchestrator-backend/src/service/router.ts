@@ -1,4 +1,5 @@
 import { errorHandler } from '@backstage/backend-common';
+import { Config } from '@backstage/config';
 import { DiscoveryApi } from '@backstage/core-plugin-api';
 import { ScmIntegrations } from '@backstage/integration';
 import { JsonObject, JsonValue } from '@backstage/types';
@@ -6,13 +7,12 @@ import { JsonObject, JsonValue } from '@backstage/types';
 import express from 'express';
 import Router from 'express-promise-router';
 import { JSONSchema7 } from 'json-schema';
+import { Logger } from 'winston';
 
 import {
   fromWorkflowSource,
   ORCHESTRATOR_SERVICE_READY_TOPIC,
   WorkflowDataInputSchemaResponse,
-  WorkflowDefinition,
-  WorkflowInfo,
   WorkflowItem,
   WorkflowListResult,
   WorkflowOverviewListResult,
@@ -20,6 +20,8 @@ import {
 
 import { RouterArgs } from '../routerWrapper';
 import { ApiResponseBuilder } from '../types/apiResponse';
+import { BackendExecCtx } from '../types/backendExecCtx';
+import { DEFAULT_DATA_INDEX_URL } from '../types/constants';
 import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
