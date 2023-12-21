@@ -18,26 +18,32 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    WorkflowOverviewListResult: {
-      overviews?: components['schemas']['WorkflowOverview'][];
-      paginationInfo?: components['schemas']['PaginationInfo'];
-    };
-    WorkflowOverview: {
-      /** @description Workflow unique identifier */
-      workflowId?: string;
-      /** @description Workflow name */
-      name?: string;
-      uri?: string;
-      lastTriggeredMs?: number;
-      lastRunStatus?: string;
-      type?: string;
-      avgDurationMs?: number;
-      description?: string;
-    };
     PaginationInfo: {
       limit?: number;
       offset?: number;
       totalCount?: number;
+    };
+    WorkflowOverview: {
+      /** @description Average duration of workflow runs */
+      avgDurationMs?: number;
+      /** @description Category of the workflow */
+      category?: string;
+      /** @description Description of the workflow */
+      description?: string;
+      /** @description Status of the last workflow execution */
+      lastRunStatus?: string;
+      /** @description Timestamp of the last workflow execution */
+      lastTriggeredMs?: number;
+      /** @description Workflow name */
+      name?: string;
+      /** @description URI of the workflow definition */
+      uri?: string;
+      /** @description Workflow unique identifier */
+      workflowId?: string;
+    };
+    WorkflowOverviewListResult: {
+      overviews?: components['schemas']['WorkflowOverview'][];
+      paginationInfo?: components['schemas']['PaginationInfo'];
     };
   };
   responses: never;
@@ -64,24 +70,7 @@ export interface operations {
       /** @description Success */
       200: {
         content: {
-          'application/json': {
-            /** @description Average duration of workflow runs */
-            avgDurationMs?: number;
-            /** @description Workflow description */
-            description?: string;
-            /** @description Status of the last workflow run */
-            lastRunStatus?: string;
-            /** @description Timestamp of the last workflow execution */
-            lastTriggeredMs?: number;
-            /** @description Name of the workflow */
-            name?: string;
-            /** @description Type of the workflow */
-            type?: string;
-            /** @description URI of the workflow */
-            uri?: string;
-            /** @description Workflow identifier */
-            workflowId?: string;
-          };
+          'application/json': components['schemas']['WorkflowOverview'];
         };
       };
       /** @description Error fetching workflow overview */

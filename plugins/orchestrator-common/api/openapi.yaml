@@ -88,19 +88,25 @@ components:
           minLength: 1
         uri:
           type: string
+          description: URI of the workflow definition
         lastTriggeredMs:
           type: number
+          description: Timestamp of the last workflow execution
           minimum: 0
         lastRunStatus:
           type: string
-        type:
+          description: Status of the last workflow execution
+        category:
           type: string
-          minimum: 0
+          description: Category of the workflow
+          minLength: 0
         avgDurationMs:
           type: number
+          description: Average duration of workflow runs
           minimum: 0
         description:
           type: string
+          description: Description of the workflow
     PaginationInfo:
       type: object
       properties:
