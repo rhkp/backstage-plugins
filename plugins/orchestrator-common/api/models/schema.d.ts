@@ -4,6 +4,9 @@
  */
 
 export interface paths {
+  '/workflows': {
+    get: operations['getWorkflows'];
+  };
   '/workflows/{workflowId}/overview': {
     /** @description Get a workflow overview by ID */
     get: operations['getWorkflowOverviewById'];
@@ -23,11 +26,31 @@ export interface components {
       offset?: number;
       totalCount?: number;
     };
+    Workflow: {
+      annotations?: string[];
+      category: components['schemas']['WorkflowCategory'];
+      /** @description Description of the workflow */
+      description?: string;
+      /** @description Workflow unique identifier */
+      id: string;
+      /** @description Workflow name */
+      name?: string;
+      /** @description URI of the workflow definition */
+      uri: string;
+    };
+    /**
+     * @description Category of the workflow
+     * @enum {string}
+     */
+    WorkflowCategory: 'assessment' | 'infrastructure';
+    WorkflowListResult: {
+      items: components['schemas']['Workflow'][];
+      paginationInfo: components['schemas']['PaginationInfo'];
+    };
     WorkflowOverview: {
       /** @description Average duration of workflow runs */
       avgDurationMs?: number;
-      /** @description Category of the workflow */
-      category?: string;
+      category?: components['schemas']['WorkflowCategory'];
       /** @description Description of the workflow */
       description?: string;
       /** @description Status of the last workflow execution */
@@ -58,6 +81,16 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+  getWorkflows: {
+    responses: {
+      /** @description Ok! */
+      200: {
+        content: {
+          'application/json': components['schemas']['WorkflowOverview'];
+        };
+      };
+    };
+  };
   /** @description Get a workflow overview by ID */
   getWorkflowOverviewById: {
     parameters: {
