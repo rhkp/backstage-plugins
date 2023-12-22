@@ -51,13 +51,13 @@ const WorkflowOverviewFormatter: DataFormatter<
 > = {
   format: (data: WorkflowOverview): FormattedWorkflowOverview => {
     return {
-      id: data.workflowId,
+      id: data.workflowId ?? '',
       name: data.name || UNAVAILABLE,
       lastTriggered: data.lastTriggeredMs
         ? moment(data.lastTriggeredMs).format('DD/MM/YY HH:mm:ss')
         : UNAVAILABLE,
       lastRunStatus: data.lastRunStatus || UNAVAILABLE,
-      type: data.type || UNAVAILABLE,
+      type: data.category || UNAVAILABLE,
       avgDuration: data.avgDurationMs
         ? formatDuration(data.avgDurationMs)
         : UNAVAILABLE,

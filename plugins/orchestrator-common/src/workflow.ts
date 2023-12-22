@@ -2,7 +2,8 @@ import { Specification } from '@severlessworkflow/sdk-typescript';
 import { dump } from 'js-yaml';
 
 import { ASSESSMENT_WORKFLOW_TYPE } from './constants';
-import { WorkflowCategory, WorkflowDefinition, WorkflowFormat } from './types';
+import { WorkflowCategory } from './openapi_types';
+import { WorkflowDefinition, WorkflowFormat } from './types';
 
 export function fromWorkflowSource(content: string): WorkflowDefinition {
   const parsed = Specification.Workflow.fromSource(content);

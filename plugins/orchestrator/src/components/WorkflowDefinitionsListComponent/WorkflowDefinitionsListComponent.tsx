@@ -13,8 +13,8 @@ import moment from 'moment';
 import {
   ASSESSMENT_WORKFLOW_TYPE,
   extractWorkflowFormatFromUri,
+  Workflow,
   WorkflowCategory,
-  WorkflowItem,
 } from '@janus-idp/backstage-plugin-orchestrator-common';
 
 import { orchestratorApiRef } from '../../api';
@@ -25,7 +25,7 @@ import {
 } from '../../routes';
 
 type WorkflowsTableProps = {
-  items: WorkflowItem[];
+  items: Workflow[];
 };
 
 export const WorkflowsTable = ({ items }: WorkflowsTableProps) => {
@@ -50,14 +50,14 @@ export const WorkflowsTable = ({ items }: WorkflowsTableProps) => {
     { title: 'Name', field: 'name' },
     { title: 'Last run', field: 'lastRun' },
     { title: 'Last run status', field: 'lastRunStatus' },
-    { title: 'Type', field: 'type' },
+    { title: 'Category', field: 'category' },
     { title: 'Components', field: 'components' },
   ];
 
   const initTableState = useMemo(() => {
     const assessmentExist = !!items.find(
       item =>
-        item.definition.annotations?.find(
+        item.annotations?.find(
           annotation => annotation === ASSESSMENT_WORKFLOW_TYPE,
         ),
     );
@@ -72,11 +72,11 @@ export const WorkflowsTable = ({ items }: WorkflowsTableProps) => {
   const getInitialState = useMemo(() => {
     return items.map(item => {
       return {
-        id: item.definition.id,
-        name: item.definition.name ?? '',
+        id: item.id,
+        name: item.name ?? '',
         lastRun: '',
         lastRunStatus: '',
-        type: item.definition.annotations?.find(
+        type: item.annotations?.find(
           annotation => annotation === ASSESSMENT_WORKFLOW_TYPE,
         )
           ? WorkflowCategory.ASSESSMENT

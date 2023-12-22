@@ -12,8 +12,8 @@ import { useApi, useRouteRef } from '@backstage/core-plugin-api';
 import { Button, Grid } from '@material-ui/core';
 
 import {
+  Workflow,
   workflow_title,
-  WorkflowItem,
 } from '@janus-idp/backstage-plugin-orchestrator-common';
 
 import { orchestratorApiRef } from '../../api';
@@ -28,9 +28,7 @@ export const OrchestratorPage = () => {
   const newWorkflowLink = useRouteRef(newWorkflowRef);
   const instancesLink = useRouteRef(workflowInstancesRouteRef);
 
-  const { value, error, loading } = useAsync(async (): Promise<
-    WorkflowItem[]
-  > => {
+  const { value, error, loading } = useAsync(async (): Promise<Workflow[]> => {
     const data = await orchestratorApi.listWorkflows();
     return data.items;
   }, []);

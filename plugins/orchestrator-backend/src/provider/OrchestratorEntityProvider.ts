@@ -22,6 +22,7 @@ import {
   default_catalog_owner,
   getWorkflowCategory,
   orchestrator_service_ready_topic,
+  Workflow,
   workflow_type,
   WorkflowCategory,
   WorkflowItem,
@@ -133,7 +134,7 @@ export class OrchestratorEntityProvider
         `${this.orchestratorPluginUrl}/workflows`,
       );
       const json = await svcResponse.json();
-      const items = json.items as WorkflowItem[];
+      const items = json.items as Workflow[];
 
       const entities: Entity[] = items?.length
         ? this.workflowToTemplateEntities(items)
@@ -152,20 +153,19 @@ export class OrchestratorEntityProvider
   }
 
   private workflowToTemplateEntities(
-    items: WorkflowItem[],
+    items: Workflow[],
   ): TemplateEntityV1beta3[] {
     return items.map(i => {
-      const sanitizedId = i.definition.id.replace(/ /g, '_');
-      const category: WorkflowCategory = getWorkflowCategory(i.definition);
+      const sanitizedId = i.id?.replace(/ /g, '_');
 
       return {
         apiVersion: 'scaffolder.backstage.io/v1beta3',
         kind: 'Template',
         metadata: {
           name: sanitizedId,
-          title: i.definition.name,
-          description: i.definition.description,
-          tags: [category],
+          title: i.name,
+          description: i.description,
+          tags: [i.category],
           annotations: {
             [ANNOTATION_LOCATION]: `url:${this.sonataFlowServiceUrl}`,
             [ANNOTATION_ORIGIN_LOCATION]: `url:${this.sonataFlowServiceUrl}`,
