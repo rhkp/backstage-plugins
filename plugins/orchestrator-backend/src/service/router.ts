@@ -46,7 +46,7 @@ export async function createBackendRouter(
     '..',
     '..',
     'plugins',
-    'orchestrator-backend',
+    'orchestrator-common',
     'api',
   );
   const api = new OpenAPIBackend({
