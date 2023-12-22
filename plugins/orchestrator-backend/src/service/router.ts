@@ -6,12 +6,12 @@ import { JsonObject, JsonValue } from '@backstage/types';
 
 import express from 'express';
 import Router from 'express-promise-router';
-import { JSONSchema7 } from 'json-schema';
-import { OpenAPIBackend } from 'openapi-backend';
+import { OpenAPIBackend, Request } from 'openapi-backend';
 import { Logger } from 'winston';
 
 import {
   fromWorkflowSource,
+  getWorkflowCategory,
   orchestrator_service_ready_topic,
   WorkflowDataInputSchemaResponse,
   WorkflowItem,
@@ -28,6 +28,7 @@ import { DEFAULT_DATA_INDEX_URL } from '../types/constants';
 import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
+import { getWorkflowOverview } from './handlers';
 import { JiraEvent, JiraService } from './JiraService';
 import { OpenApiService } from './OpenApiService';
 import { ScaffolderService } from './ScaffolderService';
@@ -73,14 +74,15 @@ export async function createBackendRouter(
         res.status(500).json({ err: 'not implemented' }),
     },
   });
-  const router = Router();
-  router.use(express.json());
-  router.use('/workflows', express.text());
 
-  router.get('/health', (_, response) => {
-    logger.info('PONG!');
-    response.json({ status: 'ok' });
-  });
+  await api.init();
+
+  // router.use('/workflows', express.text());
+
+  // router.get('/health', (_, response) => {
+  //   logger.info('PONG!');
+  //   response.json({ status: 'ok' });
+  // });
 
   const githubIntegration = ScmIntegrations.fromConfig(config)
     .github.list()
@@ -123,14 +125,15 @@ export async function createBackendRouter(
   initDataIndexService(logger, config);
 
   setupInternalRoutes(
-    router,
     api,
     args.sonataFlowService,
     workflowService,
     openApiService,
     jiraService,
   );
-  setupExternalRoutes(router, discovery, scaffolderService);
+  console.log('Available operations: ', api.getOperations());
+
+  // setupExternalRoutes(router, discovery, scaffolderService);
 
   await workflowService.reloadWorkflows();
 
@@ -139,9 +142,20 @@ export async function createBackendRouter(
     eventPayload: {},
   });
 
-  api.init();
+  const router = Router();
+  router.use(express.json());
+  router.use((req, res, next) => {
+    if (!next) {
+      throw new Error('next is undefined');
+    }
+    const validation = api.validateRequest(req as Request);
+    if (!validation.valid) {
+      throw validation.errors;
+    }
 
-  router.use(errorHandler());
+    api.handleRequest(req as Request, req, res, next);
+  });
+
   return router;
 }
 
@@ -159,103 +173,99 @@ function initDataIndexService(logger: Logger, config: Config) {
 // Internal Backstage API calls to delegate to SonataFlow
 // ======================================================
 function setupInternalRoutes(
-  router: express.Router,
+  // router: express.Router,
   api: OpenAPIBackend,
   sonataFlowService: SonataFlowService,
   workflowService: WorkflowService,
   openApiService: OpenApiService,
   jiraService: JiraService,
 ) {
-  router.get('/workflows/definitions', async (_, response) => {
-    const swfs = await DataIndexService.getWorkflowDefinitions();
-    response.json(ApiResponseBuilder.SUCCESS_RESPONSE(swfs));
-  });
+  // router.get('/workflows/definitions', async (_, response) => {
+  //   const swfs = await DataIndexService.getWorkflowDefinitions();
+  //   response.json(ApiResponseBuilder.SUCCESS_RESPONSE(swfs));
+  // });
 
   api.register(
     'getWorkflowsOverview',
-    async (c, req: express.Request, res: express.Response) => {
-      const overviews = await sonataFlowService.fetchWorkflowOverviews();
-
-      if (!overviews) {
-        res.status(500).send("Couldn't fetch workflow overviews");
-        return;
-      }
-
-      const result: WorkflowOverviewListResult = {
-        overviews: overviews,
-        paginationInfo: {
-          limit: 0,
-          offset: 0,
-          totalCount: overviews?.length ?? 0,
-        },
-      };
-      console.log('List overview wf:', result);
-
-      res.status(200).json(result);
+    async (c, _, res: express.Response, next) => {
+      console.log(c.request);
+      await getWorkflowOverview(sonataFlowService)
+        .then(result => res.json(result))
+        .catch(next);
     },
   );
 
-  router.get('/workflows', async (_, res) => {
+  api.register('getWorkflows', async (c, req, res) => {
     const definitions = await sonataFlowService.fetchWorkflows();
 
     if (!definitions) {
       res.status(500).send("Couldn't fetch workflows");
       return;
     }
-
     const result: WorkflowListResult = {
-      items: definitions,
-      limit: 0,
-      offset: 0,
-      totalCount: definitions?.length ?? 0,
+      items: definitions.map(def => {
+        return {
+          annotations: def.definition.annotations,
+          category: getWorkflowCategory(def.definition),
+          description: def.definition.description,
+          name: def.definition.name,
+          uri: def.uri,
+          id: def.definition.id,
+        };
+      }),
+      paginationInfo: {
+        limit: 0,
+        offset: 0,
+        totalCount: definitions?.length ?? 0,
+      },
     };
     res.status(200).json(result);
   });
 
-  router.get('/workflows/:workflowId', async (req, res) => {
-    const {
-      params: { workflowId },
-    } = req;
+  // router.get('/workflows/:workflowId', async (req, res) => {
+  //   const {
+  //     params: { workflowId },
+  //   } = req;
 
-    const definition =
-      await sonataFlowService.fetchWorkflowDefinition(workflowId);
+  //   const definition =
+  //     await sonataFlowService.fetchWorkflowDefinition(workflowId);
 
-    if (!definition) {
-      res
-        .status(500)
-        .send(`Couldn't fetch workflow definition for ${workflowId}`);
-      return;
-    }
+  //   if (!definition) {
+  //     res
+  //       .status(500)
+  //       .send(`Couldn't fetch workflow definition for ${workflowId}`);
+  //     return;
+  //   }
 
-    const uri = await sonataFlowService.fetchWorkflowUri(workflowId);
-    if (!uri) {
-      res.status(500).send(`Couldn't fetch workflow uri for ${workflowId}`);
-      return;
-    }
+  //   const uri = await sonataFlowService.fetchWorkflowUri(workflowId);
+  //   if (!uri) {
+  //     res.status(500).send(`Couldn't fetch workflow uri for ${workflowId}`);
+  //     return;
+  //   }
 
-    res.status(200).json({
-      uri,
-      definition,
-    });
-  });
+  //   res.status(200).json({
+  //     uri,
+  //     definition,
+  //   });
+  // });
 
-  router.post('/workflows/:workflowId/execute', async (req, res) => {
-    const {
-      params: { workflowId },
-    } = req;
+  // router.post('/workflows/:workflowId/execute', async (req, res) => {
+  //   const {
+  //     params: { workflowId },
+  //   } = req;
 
-    const executionResponse = await sonataFlowService.executeWorkflow({
-      workflowId,
-      inputData: req.body,
-    });
+  //   const executionResponse = await sonataFlowService.executeWorkflow({
+  //     workflowId,
+  //     inputData: req.body,
+  //   });
 
-    if (!executionResponse) {
-      res.status(500).send(`Couldn't execute workflow ${workflowId}`);
-      return;
-    }
+  //   if (!executionResponse) {
+  //     res.status(500).send(`Couldn't execute workflow ${workflowId}`);
+  //     return;
+  //   }
 
-    res.status(200).json(executionResponse);
-  });
+  //   res.status(200).json(executionResponse);
+  // });
 
   api.register(
     'getWorkflowOverviewById',
@@ -276,134 +286,134 @@ function setupInternalRoutes(
     },
   );
 
-  router.get('/instances', async (_, res) => {
-    const instances = await sonataFlowService.fetchProcessInstances();
+  // router.get('/instances', async (_, res) => {
+  //   const instances = await sonataFlowService.fetchProcessInstances();
 
-    if (!instances) {
-      res.status(500).send("Couldn't fetch process instances");
-      return;
-    }
+  //   if (!instances) {
+  //     res.status(500).send("Couldn't fetch process instances");
+  //     return;
+  //   }
 
-    res.status(200).json(instances);
-  });
+  //   res.status(200).json(instances);
+  // });
 
-  router.get('/instances/:instanceId', async (req, res) => {
-    const {
-      params: { instanceId },
-    } = req;
-    const instance = await sonataFlowService.fetchProcessInstance(instanceId);
+  // router.get('/instances/:instanceId', async (req, res) => {
+  //   const {
+  //     params: { instanceId },
+  //   } = req;
+  //   const instance = await sonataFlowService.fetchProcessInstance(instanceId);
 
-    if (!instance) {
-      res.status(500).send(`Couldn't fetch process instance ${instanceId}`);
-      return;
-    }
+  //   if (!instance) {
+  //     res.status(500).send(`Couldn't fetch process instance ${instanceId}`);
+  //     return;
+  //   }
 
-    res.status(200).json(instance);
-  });
+  //   res.status(200).json(instance);
+  // });
 
-  router.get('/instances/:instanceId/jobs', async (req, res) => {
-    const {
-      params: { instanceId },
-    } = req;
+  // router.get('/instances/:instanceId/jobs', async (req, res) => {
+  //   const {
+  //     params: { instanceId },
+  //   } = req;
 
-    const jobs = await sonataFlowService.fetchProcessInstanceJobs(instanceId);
+  //   const jobs = await sonataFlowService.fetchProcessInstanceJobs(instanceId);
 
-    if (!jobs) {
-      res.status(500).send(`Couldn't fetch jobs for instance ${instanceId}`);
-      return;
-    }
+  //   if (!jobs) {
+  //     res.status(500).send(`Couldn't fetch jobs for instance ${instanceId}`);
+  //     return;
+  //   }
 
-    res.status(200).json(jobs);
-  });
+  //   res.status(200).json(jobs);
+  // });
 
-  router.get('/workflows/:workflowId/schema', async (req, res) => {
-    const {
-      params: { workflowId },
-    } = req;
+  // router.get('/workflows/:workflowId/schema', async (req, res) => {
+  //   const {
+  //     params: { workflowId },
+  //   } = req;
 
-    const definition =
-      await sonataFlowService.fetchWorkflowDefinition(workflowId);
+  //   const definition =
+  //     await sonataFlowService.fetchWorkflowDefinition(workflowId);
 
-    if (!definition) {
-      res.status(500).send(`Couldn't fetch workflow definition ${workflowId}`);
-      return;
-    }
+  //   if (!definition) {
+  //     res.status(500).send(`Couldn't fetch workflow definition ${workflowId}`);
+  //     return;
+  //   }
 
-    const uri = await sonataFlowService.fetchWorkflowUri(workflowId);
+  //   const uri = await sonataFlowService.fetchWorkflowUri(workflowId);
 
-    if (!uri) {
-      res.status(500).send(`Couldn't fetch workflow uri ${workflowId}`);
-      return;
-    }
+  //   if (!uri) {
+  //     res.status(500).send(`Couldn't fetch workflow uri ${workflowId}`);
+  //     return;
+  //   }
 
-    const workflowItem: WorkflowItem = { uri, definition };
+  //   const workflowItem: WorkflowItem = { uri, definition };
 
-    let schema: JSONSchema7 | undefined = undefined;
+  //   let schema: JSONSchema7 | undefined = undefined;
 
-    if (definition.dataInputSchema) {
-      const workflowInfo =
-        await sonataFlowService.fetchWorkflowInfo(workflowId);
+  //   if (definition.dataInputSchema) {
+  //     const workflowInfo =
+  //       await sonataFlowService.fetchWorkflowInfo(workflowId);
 
-      if (!workflowInfo) {
-        res.status(500).send(`Couldn't fetch workflow info ${workflowId}`);
-        return;
-      }
+  //     if (!workflowInfo) {
+  //       res.status(500).send(`Couldn't fetch workflow info ${workflowId}`);
+  //       return;
+  //     }
 
-      schema = workflowInfo.inputSchema;
-    }
+  //     schema = workflowInfo.inputSchema;
+  //   }
 
-    const response: WorkflowDataInputSchemaResponse = {
-      workflowItem: workflowItem,
-      schema,
-    };
+  //   const response: WorkflowDataInputSchemaResponse = {
+  //     workflowItem: workflowItem,
+  //     schema,
+  //   };
 
-    res.status(200).json(response);
-  });
+  //   res.status(200).json(response);
+  // });
 
-  router.delete('/workflows/:workflowId', async (req, res) => {
-    const workflowId = req.params.workflowId;
-    const uri = await sonataFlowService.fetchWorkflowUri(workflowId);
+  // router.delete('/workflows/:workflowId', async (req, res) => {
+  //   const workflowId = req.params.workflowId;
+  //   const uri = await sonataFlowService.fetchWorkflowUri(workflowId);
 
-    if (!uri) {
-      res.status(500).send(`Couldn't fetch workflow uri ${workflowId}`);
-      return;
-    }
+  //   if (!uri) {
+  //     res.status(500).send(`Couldn't fetch workflow uri ${workflowId}`);
+  //     return;
+  //   }
 
-    await workflowService.deleteWorkflowDefinitionById(uri);
-    res.status(201).send();
-  });
+  //   await workflowService.deleteWorkflowDefinitionById(uri);
+  //   res.status(201).send();
+  // });
 
-  router.post('/workflows', async (req, res) => {
-    const uri = req.query.uri as string;
-    const workflowItem = uri?.startsWith('http')
-      ? await workflowService.saveWorkflowDefinitionFromUrl(uri)
-      : await workflowService.saveWorkflowDefinition({
-          uri,
-          definition: fromWorkflowSource(req.body),
-        });
-    res.status(201).json(workflowItem).send();
-  });
+  // router.post('/workflows', async (req, res) => {
+  //   const uri = req.query.uri as string;
+  //   const workflowItem = uri?.startsWith('http')
+  //     ? await workflowService.saveWorkflowDefinitionFromUrl(uri)
+  //     : await workflowService.saveWorkflowDefinition({
+  //         uri,
+  //         definition: fromWorkflowSource(req.body),
+  //       });
+  //   res.status(201).json(workflowItem).send();
+  // });
 
-  router.get('/actions/schema', async (_, res) => {
-    const openApi = await openApiService.generateOpenApi();
-    res.json(openApi).status(200).send();
-  });
+  // router.get('/actions/schema', async (_, res) => {
+  //   const openApi = await openApiService.generateOpenApi();
+  //   res.json(openApi).status(200).send();
+  // });
 
-  router.put('/actions/schema', async (_, res) => {
-    const openApi = await workflowService.saveOpenApi();
-    res.json(openApi).status(200).send();
-  });
+  // router.put('/actions/schema', async (_, res) => {
+  //   const openApi = await workflowService.saveOpenApi();
+  //   res.json(openApi).status(200).send();
+  // });
 
-  router.post('/webhook/jira', async (req, res) => {
-    const event = req.body as JiraEvent;
-    await jiraService.handleEvent(event);
-    res.status(200).send();
-  });
+  // router.post('/webhook/jira', async (req, res) => {
+  //   const event = req.body as JiraEvent;
+  //   await jiraService.handleEvent(event);
+  //   res.status(200).send();
+  // });
 
-  router.get('/specs', async (_, res) => {
-    const specs = await workflowService.listStoredSpecs();
-    res.json(specs).status(200).send();
-  });
+  // router.get('/specs', async (_, res) => {
+  //   const specs = await workflowService.listStoredSpecs();
+  //   res.json(specs).status(200).send();
+  // });
 }
 
 // ======================================================
