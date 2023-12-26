@@ -5,9 +5,8 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 
 import { policyEntityReadPermission } from '@janus-idp/backstage-plugin-rbac-common';
 
-import { DeleteDialogContextProvider } from './DeleteDialogContext';
-import { RolesList } from './RolesList';
-import { ToastContextProvider } from './ToastContext';
+import { DeleteDialogContextProvider } from './RolesList/DeleteDialogContext';
+import { RolesList } from './RolesList/RolesList';
 
 export const RbacPage = () => (
   <RequirePermission
@@ -16,15 +15,13 @@ export const RbacPage = () => (
   >
     <Page themeId="tool">
       <Header title="Administration" />
-      <ToastContextProvider>
-        <DeleteDialogContextProvider>
-          <TabbedLayout>
-            <TabbedLayout.Route path="/rbac" title="RBAC">
-              <RolesList />
-            </TabbedLayout.Route>
-          </TabbedLayout>
-        </DeleteDialogContextProvider>
-      </ToastContextProvider>
+      <DeleteDialogContextProvider>
+        <TabbedLayout>
+          <TabbedLayout.Route path="/rbac" title="RBAC">
+            <RolesList />
+          </TabbedLayout.Route>
+        </TabbedLayout>
+      </DeleteDialogContextProvider>
     </Page>
   </RequirePermission>
 );

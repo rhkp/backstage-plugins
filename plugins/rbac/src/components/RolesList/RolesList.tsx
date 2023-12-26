@@ -6,12 +6,13 @@ import { makeStyles } from '@material-ui/core';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
-import { useRoles } from '../hooks/useRoles';
-import { RolesData } from '../types';
+import { useRoles } from '../../hooks/useRoles';
+import { RolesData } from '../../types';
+import { useToast } from '../ToastContext';
 import { useDeleteDialog } from './DeleteDialogContext';
 import DeleteRoleDialog from './DeleteRoleDialog';
 import { columns } from './RolesListColumns';
-import { useToast } from './ToastContext';
+import { RolesListToolbar } from './RolesListToolbar';
 
 const useStyles = makeStyles(theme => ({
   empty: {
@@ -27,7 +28,7 @@ export const RolesList = () => {
 
   const [roles, setRoles] = React.useState<number | undefined>();
   const classes = useStyles();
-  const { loading, data, retry } = useRoles();
+  const { loading, data, retry, createRoleAllowed } = useRoles();
 
   const closeDialog = () => {
     setOpenDialog(false);
@@ -61,6 +62,7 @@ export const RolesList = () => {
           {toastMessage}
         </Alert>
       </Snackbar>
+      <RolesListToolbar createRoleAllowed={createRoleAllowed} />
       <Table
         title={
           !loading && data?.length

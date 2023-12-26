@@ -1,3 +1,31 @@
+## @janus-idp/backstage-plugin-rbac [1.9.0](https://github.com/janus-idp/backstage-plugins/compare/@janus-idp/backstage-plugin-rbac@1.8.0...@janus-idp/backstage-plugin-rbac@1.9.0) (2023-12-21)
+
+
+### Features
+
+* **rbac:** support for adding permission policies to roles ([#1021](https://github.com/janus-idp/backstage-plugins/issues/1021)) ([dd11c3a](https://github.com/janus-idp/backstage-plugins/commit/dd11c3a14eebaea9e8acc43b0c28b338d5fa14c1))
+
+## @janus-idp/backstage-plugin-rbac [1.8.0](https://github.com/janus-idp/backstage-plugins/compare/@janus-idp/backstage-plugin-rbac@1.7.0...@janus-idp/backstage-plugin-rbac@1.8.0) (2023-12-20)
+
+
+### Features
+
+* **rbac:** cleanup policies when a role is deleted ([#1018](https://github.com/janus-idp/backstage-plugins/issues/1018)) ([fb0ee8c](https://github.com/janus-idp/backstage-plugins/commit/fb0ee8c269892f6c2ccaea69754a9dda653d4fcb))
+
+## @janus-idp/backstage-plugin-rbac [1.7.0](https://github.com/janus-idp/backstage-plugins/compare/@janus-idp/backstage-plugin-rbac@1.6.0...@janus-idp/backstage-plugin-rbac@1.7.0) (2023-12-15)
+
+
+### Features
+
+* **rbac:** allow editing roles ([#1001](https://github.com/janus-idp/backstage-plugins/issues/1001)) ([2e81062](https://github.com/janus-idp/backstage-plugins/commit/2e810620ea5641df827dfe83bf7695cf16117033))
+
+## @janus-idp/backstage-plugin-rbac [1.6.0](https://github.com/janus-idp/backstage-plugins/compare/@janus-idp/backstage-plugin-rbac@1.5.1...@janus-idp/backstage-plugin-rbac@1.6.0) (2023-12-12)
+
+
+### Features
+
+* **rbac:** add support for creation of role ([#974](https://github.com/janus-idp/backstage-plugins/issues/974)) ([7cb9cbd](https://github.com/janus-idp/backstage-plugins/commit/7cb9cbdba6076ffc5447e560de197ecd68ba6e40))
+
 ## @janus-idp/backstage-plugin-rbac [1.5.1](https://github.com/janus-idp/backstage-plugins/compare/@janus-idp/backstage-plugin-rbac@1.5.0...@janus-idp/backstage-plugin-rbac@1.5.1) (2023-12-07)
 
 

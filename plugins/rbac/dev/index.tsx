@@ -39,9 +39,17 @@ class MockRBACApi implements RBACAPI {
   constructor(fixtureData: Role[]) {
     this.resources = fixtureData;
   }
+
   async getRoles(): Promise<Role[]> {
     return this.resources;
   }
+
+  async getAssociatedPolicies(
+    entityReference: string,
+  ): Promise<RoleBasedPolicy[]> {
+    return mockPolicies.filter(pol => pol.entityReference === entityReference);
+  }
+
   async getPolicies(): Promise<RoleBasedPolicy[]> {
     return mockPolicies;
   }
@@ -52,16 +60,29 @@ class MockRBACApi implements RBACAPI {
     };
   }
 
-  async getRole(role: string): Promise<Role[]> {
+  async getRole(role: string): Promise<Role[] | Response> {
     const roleresource = this.resources.find(res => res.name === role);
-    return roleresource ? [roleresource] : [];
+    return roleresource
+      ? [roleresource]
+      : ({ status: 404, statusText: 'Not Found' } as Response);
   }
 
-  async deleteRole(_roleName: string): Promise<any> {
-    return { status: 204 };
+  async updateRole(_oldRole: Role, _newRole: Role): Promise<Response> {
+    return { status: 200 } as Response;
   }
 
-  async getMembers(): Promise<MemberEntity[]> {
+  async updatePolicy(
+    _oldPolicy: RoleBasedPolicy,
+    _newPolicy: RoleBasedPolicy,
+  ): Promise<Response> {
+    return { status: 204 } as Response;
+  }
+
+  async deleteRole(_roleName: string): Promise<Response> {
+    return { status: 204, statusText: 'Deleted Successfully' } as Response;
+  }
+
+  async getMembers(): Promise<MemberEntity[] | Response> {
     return mockMembers;
   }
 
@@ -69,12 +90,23 @@ class MockRBACApi implements RBACAPI {
     return mockPermissionPolicies;
   }
 
-  async deletePolicy(
+  async deletePolicies(
     _entityRef: string,
-    _permission: string,
     _policies: Policy[],
-  ): Promise<number> {
-    return 204;
+  ): Promise<Response> {
+    return {
+      ok: true,
+      status: 204,
+      statusText: 'Deleted Successfully',
+    } as Response;
+  }
+
+  async createRole(_role: Role): Promise<Response> {
+    return { status: 200 } as Response;
+  }
+
+  async createPolicy(_data: any): Promise<Response> {
+    return { status: 200 } as Response;
   }
 }
 

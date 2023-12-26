@@ -1,3 +1,17 @@
+## @janus-idp/backstage-scaffolder-backend-module-servicenow [1.2.7](https://github.com/janus-idp/backstage-plugins/compare/@janus-idp/backstage-scaffolder-backend-module-servicenow@1.2.6...@janus-idp/backstage-scaffolder-backend-module-servicenow@1.2.7) (2023-12-11)
+
+
+### Bug Fixes
+
+* **#1012:** typo fix in `servicenow:now:table:retrieveRecords` action ([#1013](https://github.com/janus-idp/backstage-plugins/issues/1013)) ([9229a30](https://github.com/janus-idp/backstage-plugins/commit/9229a30acd21e9a5a46bdbaa503e6c4e29968dee))
+
+## @janus-idp/backstage-scaffolder-backend-module-servicenow [1.2.6](https://github.com/janus-idp/backstage-plugins/compare/@janus-idp/backstage-scaffolder-backend-module-servicenow@1.2.5...@janus-idp/backstage-scaffolder-backend-module-servicenow@1.2.6) (2023-12-07)
+
+
+### Bug Fixes
+
+* attempt to force a bump of backend plugins ([#1007](https://github.com/janus-idp/backstage-plugins/issues/1007)) ([7a37225](https://github.com/janus-idp/backstage-plugins/commit/7a372254fb7e8107aa794f7900a6511eee096677))
+
 ## @janus-idp/backstage-scaffolder-backend-module-servicenow [1.2.5](https://github.com/janus-idp/backstage-plugins/compare/@janus-idp/backstage-scaffolder-backend-module-servicenow@1.2.4...@janus-idp/backstage-scaffolder-backend-module-servicenow@1.2.5) (2023-12-07)
 
 

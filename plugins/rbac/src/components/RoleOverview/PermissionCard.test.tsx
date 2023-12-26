@@ -2,11 +2,11 @@ import React from 'react';
 
 import { renderInTestApp } from '@backstage/test-utils';
 
-import { usePermissionPolicies } from '../hooks/usePermissionPolicies';
-import { PermissionsData } from '../types';
+import { usePermissionPolicies } from '../../hooks/usePermissionPolicies';
+import { PermissionsData } from '../../types';
 import { PermissionsCard } from './PermissionsCard';
 
-jest.mock('../hooks/usePermissionPolicies', () => ({
+jest.mock('../../hooks/usePermissionPolicies', () => ({
   usePermissionPolicies: jest.fn(),
 }));
 
@@ -62,7 +62,7 @@ describe('PermissionsCard', () => {
       <PermissionsCard entityReference="user:default/debsmita1" />,
     );
     expect(queryByText('Permission Policies')).not.toBeNull();
-    expect(queryByText('No permissions policies found')).not.toBeNull();
+    expect(queryByText('No records found')).not.toBeNull();
   });
   it('should show an error if api call fails', async () => {
     mockPermissionPolicies.mockReturnValue({
@@ -80,6 +80,6 @@ describe('PermissionsCard', () => {
       ),
     ).not.toBeNull();
 
-    expect(queryByText('No permissions policies found')).not.toBeNull();
+    expect(queryByText('No records found')).not.toBeNull();
   });
 });

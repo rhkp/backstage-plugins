@@ -2,6 +2,43 @@ export const mockKubernetesPlrResponse = {
   pods: [
     {
       metadata: {
+        name: 'pipeline-test-wbvtlk-tkn-pod',
+        namespace: 'karthik',
+        uid: 'bd868fde-1b37-4168-a780-f1772c5924e3',
+        resourceVersion: '379524',
+        labels: {
+          'app.kubernetes.io/managed-by': 'tekton-pipelines',
+          'backstage.io/kubernetes-id': 'developer-portal',
+          'janus-idp.io/tekton': 'developer-portal',
+          'tekton.dev/clusterTask': 'tkn',
+          'tekton.dev/memberOf': 'tasks',
+          'tekton.dev/pipeline': 'test-pipeline',
+          'tekton.dev/pipelineRun': 'pipeline-test-wbvtlk',
+          'tekton.dev/pipelineTask': 'tkn',
+          'tekton.dev/taskRun': 'test-pipeline-8e09zm-task1',
+        },
+      },
+      spec: {
+        volumes: [
+          {
+            name: 'tekton-internal-workspace',
+            emptyDir: {},
+          },
+        ],
+        containers: [
+          {
+            name: 'step-tkn',
+          },
+        ],
+      },
+      status: {
+        phase: 'Succeeded',
+        conditions: [],
+        startTime: new Date('2023-12-08T12:19:29Z'),
+      },
+    },
+    {
+      metadata: {
         name: 'ruby-ex-git-xf45fo-build-pod',
         generateName: 'ruby-ex-git-66d547b559-',
         namespace: 'jai-test',
@@ -13,6 +50,8 @@ export const mockKubernetesPlrResponse = {
           'backstage.io/kubernetes-id': 'backstage',
           deployment: 'ruby-ex-git',
           'pod-template-hash': '66d547b559',
+          'tekton.dev/pipelineRun': 'ruby-ex-git-xf45fo',
+          'tekton.dev/pipelineTask': 'build',
         },
         ownerReferences: [
           {
@@ -207,6 +246,7 @@ export const mockKubernetesPlrResponse = {
       kind: 'PipelineRun',
       metadata: {
         annotations: {
+          'chains.tekton.dev/signed': 'true',
           'pipeline.openshift.io/started-by': 'kube:admin',
         },
         creationTimestamp: new Date('2023-03-30T07:03:04Z'),
@@ -280,6 +320,13 @@ export const mockKubernetesPlrResponse = {
           ],
           workspaces: [],
         },
+        pipelineResults: [
+          {
+            name: 'MY_SCAN_OUTPUT',
+            value:
+              '{"vulnerabilities":{\n"critical": 1,\n"high": 9,\n"medium": 20,\n"low": 1,\n"unknown": 0},\n"unpatched_vulnerabilities": {\n"critical": 0,\n"high": 1,\n"medium": 0,\n"low":1}\n}\n',
+          },
+        ],
         startTime: '2023-03-30T07:03:04Z',
       },
     },
@@ -289,6 +336,7 @@ export const mockKubernetesPlrResponse = {
       metadata: {
         annotations: {
           'pipeline.openshift.io/started-by': 'kube-admin',
+          'chains.tekton.dev/signed': 'false',
         },
         labels: {
           'backstage.io/kubernetes-id': 'test-backstage',
@@ -367,6 +415,13 @@ export const mockKubernetesPlrResponse = {
           startTime: '2023-04-11T06:48:50Z',
         },
         startTime: '2023-04-11T05:49:05Z',
+        results: [
+          {
+            name: 'SCAN_OUTPUT',
+            value:
+              '{"vulnerabilities":{\n"critical": 13,\n"high": 29,\n"medium": 32,\n"low": 3,\n"unknown": 0},\n"unpatched_vulnerabilities": {\n"critical": 0,\n"high": 1,\n"medium": 0,\n"low":1}\n}\n',
+          },
+        ],
       },
     },
   ],

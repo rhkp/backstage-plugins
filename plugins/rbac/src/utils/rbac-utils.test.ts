@@ -1,5 +1,6 @@
 import { GroupEntity } from '@backstage/catalog-model';
 
+import { mockPermissionPolicies } from '../__fixtures__/mockPermissionPolicies';
 import {
   getKindNamespaceName,
   getMembers,
@@ -53,61 +54,15 @@ const mockPolicies = [
   },
 ];
 
-const mockPermissionPolicies = [
-  {
-    pluginId: 'catalog',
-    policies: [
-      {
-        permission: 'catalog-entity',
-        policy: 'read',
-      },
-      {
-        permission: 'catalog.entity.create',
-        policy: 'create',
-      },
-    ],
-  },
-  {
-    pluginId: 'scaffolder',
-    policies: [
-      {
-        permission: 'scaffolder-template',
-        policy: 'read',
-      },
-      {
-        permission: 'scaffolder-action',
-        policy: 'use',
-      },
-    ],
-  },
-  {
-    pluginId: 'permission',
-    policies: [
-      {
-        permission: 'policy-entity',
-        policy: 'read',
-      },
-      {
-        permission: 'policy-entity',
-        policy: 'create',
-      },
-      {
-        permission: 'policy-entity',
-        policy: 'update',
-      },
-    ],
-  },
-];
-
 describe('rbac utils', () => {
-  it('should list associated permissions for a role', () => {
+  it('should list associated allowed permissions for a role', () => {
     expect(getPermissions('role:default/guests', mockPolicies)).toBe(0);
     expect(getPermissions('user:default/xyz', mockPolicies)).toBe(5);
   });
 
   it('should return number of users and groups in member references', () => {
     expect(getMembers(['user:default/xyz', 'group:default/admins'])).toBe(
-      '1 User, 1 Group',
+      '1 user, 1 group',
     );
 
     expect(
@@ -116,11 +71,11 @@ describe('rbac utils', () => {
         'group:default/admins',
         'user:default/alice',
       ]),
-    ).toBe('2 Users, 1 Group');
+    ).toBe('2 users, 1 group');
 
-    expect(getMembers(['user:default/xyz'])).toBe('1 User');
+    expect(getMembers(['user:default/xyz'])).toBe('1 user');
 
-    expect(getMembers(['group:default/xyz'])).toBe('1 Group');
+    expect(getMembers(['group:default/xyz'])).toBe('1 group');
 
     expect(getMembers([])).toBe('No members');
   });
