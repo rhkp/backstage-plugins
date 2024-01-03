@@ -28,7 +28,11 @@ import { DEFAULT_DATA_INDEX_URL } from '../types/constants';
 import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
-import { getWorkflowOverview, getWorkflowOverviewById } from './handlers';
+import {
+  getWorkflowOverview,
+  getWorkflowOverviewById,
+  getWorkflows,
+} from './handlers';
 import { JiraEvent, JiraService } from './JiraService';
 import { OpenApiService } from './OpenApiService';
 import { ScaffolderService } from './ScaffolderService';
@@ -232,6 +236,13 @@ function setupInternalRoutes(
       totalCount: items?.length ?? 0,
     };
     res.status(200).json(result);
+  });
+
+  // v2
+  api.register('getWorkflows', async (c, req, res, next) => {
+    await getWorkflows(sonataFlowService)
+      .then(result => res.json(result))
+      .catch(next);
   });
 
   router.get('/workflows/:workflowId', async (req, res) => {

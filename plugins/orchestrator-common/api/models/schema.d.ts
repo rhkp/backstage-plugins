@@ -12,6 +12,14 @@ export interface paths {
     /** @description Get a workflow overview by ID */
     get: operations['getWorkflowOverviewById'];
   };
+  '/v2/workflows': {
+    /** @description Get a list of workflow */
+    get: operations['getWorkflows'];
+  };
+  '/v2/workflows/{workflowId}': {
+    /** @description Get a workflow by ID */
+    get: operations['getWorkflowById'];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -39,6 +47,27 @@ export interface components {
       offset?: number;
       totalCount?: number;
     };
+    WorkflowListResultDTO: {
+      items: components['schemas']['WorkflowDTO'][];
+      paginationInfo: components['schemas']['PaginationInfoDTO'];
+    };
+    WorkflowDTO: {
+      /** @description Workflow unique identifier */
+      id: string;
+      /** @description Workflow name */
+      name?: string;
+      /** @description URI of the workflow definition */
+      uri: string;
+      category: components['schemas']['WorkflowCategoryDTO'];
+      /** @description Description of the workflow */
+      description?: string;
+      annotations?: string[];
+    };
+    /**
+     * @description Category of the workflow
+     * @enum {string}
+     */
+    WorkflowCategoryDTO: 'assessment' | 'infrastructure';
   };
   responses: never;
   parameters: never;
@@ -84,10 +113,56 @@ export interface operations {
       /** @description Success */
       200: {
         content: {
-          'application/json': components['schemas']['WorkflowOverview'];
+          'application/json': components['schemas']['WorkflowOverviewDTO'];
         };
       };
       /** @description Error fetching workflow overview */
+      500: {
+        content: {
+          'application/json': {
+            /** @description Error message */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** @description Get a list of workflow */
+  getWorkflows: {
+    responses: {
+      /** @description Success */
+      200: {
+        content: {
+          'application/json': components['schemas']['WorkflowListResultDTO'];
+        };
+      };
+      /** @description Error fetching workflow list */
+      500: {
+        content: {
+          'application/json': {
+            /** @description Error message */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** @description Get a workflow by ID */
+  getWorkflowById: {
+    parameters: {
+      path: {
+        /** @description Unique identifier of the workflow */
+        workflowId: string;
+      };
+    };
+    responses: {
+      /** @description Success */
+      200: {
+        content: {
+          'application/json': components['schemas']['WorkflowDTO'];
+        };
+      };
+      /** @description Error fetching workflow */
       500: {
         content: {
           'application/json': {
