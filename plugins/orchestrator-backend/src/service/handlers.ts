@@ -1,5 +1,6 @@
 import {
   getWorkflowCategory,
+  WorkflowDTO,
   WorkflowListResultDTO,
   WorkflowOverviewDTO,
   WorkflowOverviewListResultDTO,
@@ -63,4 +64,29 @@ export async function getWorkflows(sonataFlowService: SonataFlowService) {
     },
   };
   return result;
+}
+
+export async function getWorkflowById(
+  sonataFlowService: SonataFlowService,
+  workflowId: string,
+): Promise<WorkflowDTO> {
+  const definition =
+    await sonataFlowService.fetchWorkflowDefinition(workflowId);
+
+  if (!definition) {
+    throw new Error(`Couldn't fetch workflow definition for ${workflowId}`);
+  }
+
+  const uri = await sonataFlowService.fetchWorkflowUri(workflowId);
+  if (!uri) {
+    throw new Error(`Couldn't fetch workflow uri for ${workflowId}`);
+  }
+  return {
+    annotations: definition.annotations,
+    category: getWorkflowCategory(definition),
+    description: definition.description,
+    name: definition.name,
+    uri: uri,
+    id: definition.id,
+  };
 }

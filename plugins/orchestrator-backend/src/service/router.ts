@@ -29,6 +29,7 @@ import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
 import {
+  getWorkflowById,
   getWorkflowOverview,
   getWorkflowOverviewById,
   getWorkflows,
@@ -270,6 +271,15 @@ function setupInternalRoutes(
       uri,
       definition,
     });
+  });
+  // v2
+  api.register('getWorkflowById', async (c, req, res, next) => {
+    const {
+      params: { workflowId },
+    } = req;
+    await getWorkflowById(sonataFlowService, workflowId)
+      .then(result => res.json(result))
+      .catch(next);
   });
 
   router.delete('/workflows/:workflowId/abort', async (req, res) => {
