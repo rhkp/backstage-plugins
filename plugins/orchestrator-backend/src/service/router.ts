@@ -28,6 +28,7 @@ import { DEFAULT_DATA_INDEX_URL } from '../types/constants';
 import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
+import { getWorkflowOverview } from './handlers';
 import { JiraEvent, JiraService } from './JiraService';
 import { OpenApiService } from './OpenApiService';
 import { ScaffolderService } from './ScaffolderService';
@@ -126,6 +127,7 @@ export async function createBackendRouter(
 
   setupInternalRoutes(
     router,
+    api,
     args.sonataFlowService,
     workflowService,
     openApiService,
@@ -159,6 +161,7 @@ function initDataIndexService(logger: Logger, config: Config) {
 // ======================================================
 function setupInternalRoutes(
   router: express.Router,
+  api: OpenAPIBackend,
   sonataFlowService: SonataFlowService,
   workflowService: WorkflowService,
   openApiService: OpenApiService,
@@ -187,6 +190,17 @@ function setupInternalRoutes(
     };
     res.status(200).json(result);
   });
+
+  // v2
+  api.register(
+    'getWorkflowsOverview',
+    async (c, _, res: express.Response, next) => {
+      console.log(c.request);
+      await getWorkflowOverview(sonataFlowService)
+        .then(result => res.json(result))
+        .catch(next);
+    },
+  );
 
   router.get('/workflows', async (_, res) => {
     const definitions: WorkflowInfo[] =

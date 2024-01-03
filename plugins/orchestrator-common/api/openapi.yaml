@@ -20,13 +20,13 @@ paths:
       operationId: getWorkflowsOverview
       description: Get a list of workflow overviews
       responses:
-        '200':
+        200:
           description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WorkflowOverviewListResultDTO'
-        '500':
+        500:
           description: Error fetching workflow overviews
           content:
             application/json:
