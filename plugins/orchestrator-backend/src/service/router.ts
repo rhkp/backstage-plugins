@@ -28,7 +28,7 @@ import { DEFAULT_DATA_INDEX_URL } from '../types/constants';
 import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
-import { getWorkflowOverview } from './handlers';
+import { getWorkflowOverview, getWorkflowOverviewById } from './handlers';
 import { JiraEvent, JiraService } from './JiraService';
 import { OpenApiService } from './OpenApiService';
 import { ScaffolderService } from './ScaffolderService';
@@ -315,6 +315,19 @@ function setupInternalRoutes(
     }
     res.status(200).json(overviewObj);
   });
+
+  // v2
+  api.register(
+    'getWorkflowOverviewById',
+    async (c, req: express.Request, res: express.Response, next) => {
+      const {
+        params: { workflowId },
+      } = req;
+      await getWorkflowOverviewById(sonataFlowService, workflowId)
+        .then(result => res.json(result))
+        .catch(next);
+    },
+  );
 
   router.get('/instances', async (_, res) => {
     const instances = await dataIndexService.fetchProcessInstances();
