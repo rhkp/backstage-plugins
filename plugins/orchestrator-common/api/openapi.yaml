@@ -15,7 +15,7 @@ externalDocs:
 servers:
   - url: /
 paths:
-  /workflows/overview:
+  /v2/workflows/overview:
     get:
       operationId: getWorkflowsOverview
       description: Get a list of workflow overviews
