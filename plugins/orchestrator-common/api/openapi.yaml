@@ -25,7 +25,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WorkflowOverviewListResult'
+                $ref: '#/components/schemas/WorkflowOverviewListResultDTO'
         '500':
           description: Error fetching workflow overviews
           content:
@@ -38,16 +38,16 @@ paths:
                     description: Error message
 components:
   schemas:
-    WorkflowOverviewListResult:
+    WorkflowOverviewListResultDTO:
       type: object
       properties:
         overviews:
           type: array
           items:
-            $ref: '#/components/schemas/WorkflowOverview'
+            $ref: '#/components/schemas/WorkflowOverviewDTO'
         paginationInfo:
-          $ref: '#/components/schemas/PaginationInfo'
-    WorkflowOverview:
+          $ref: '#/components/schemas/PaginationInfoDTO'
+    WorkflowOverviewDTO:
       type: object
       properties:
         workflowId:
@@ -73,7 +73,7 @@ components:
           minimum: 0
         description:
           type: string
-    PaginationInfo:
+    PaginationInfoDTO:
       type: object
       properties:
         limit:

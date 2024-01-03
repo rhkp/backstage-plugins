@@ -14,11 +14,11 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    WorkflowOverviewListResult: {
-      overviews?: components['schemas']['WorkflowOverview'][];
-      paginationInfo?: components['schemas']['PaginationInfo'];
+    WorkflowOverviewListResultDTO: {
+      overviews?: components['schemas']['WorkflowOverviewDTO'][];
+      paginationInfo?: components['schemas']['PaginationInfoDTO'];
     };
-    WorkflowOverview: {
+    WorkflowOverviewDTO: {
       /** @description Workflow unique identifier */
       workflowId?: string;
       /** @description Workflow name */
@@ -30,7 +30,7 @@ export interface components {
       avgDurationMs?: number;
       description?: string;
     };
-    PaginationInfo: {
+    PaginationInfoDTO: {
       limit?: number;
       offset?: number;
       totalCount?: number;
@@ -54,7 +54,7 @@ export interface operations {
       /** @description Success */
       200: {
         content: {
-          'application/json': components['schemas']['WorkflowOverviewListResult'];
+          'application/json': components['schemas']['WorkflowOverviewListResultDTO'];
         };
       };
       /** @description Error fetching workflow overviews */
