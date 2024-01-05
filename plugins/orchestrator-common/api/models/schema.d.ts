@@ -85,7 +85,7 @@ export interface components {
      * @description Category of the workflow
      * @enum {string}
      */
-    WorkflowCategoryDTO: 'assessment' | 'infrastructure';
+    WorkflowCategoryDTO: WorkflowCategoryDTO;
     WorkflowDTO: {
       annotations?: string[];
       category: components['schemas']['WorkflowCategoryDTO'];
@@ -261,4 +261,10 @@ export interface operations {
       };
     };
   };
+}
+export enum WorkflowCategoryDTO {
+  // Assessment Workflow
+  ASSESSMENT = 'assessment',
+  // Infrastructure Workflow
+  INFRASTRUCTURE = 'infrastructure',
 }
