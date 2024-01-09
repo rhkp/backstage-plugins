@@ -1,6 +1,7 @@
 import { Specification } from '@severlessworkflow/sdk-typescript';
 import { dump } from 'js-yaml';
 
+import { WorkflowCategoryDTO } from '../api/models/schema';
 import { ASSESSMENT_WORKFLOW_TYPE } from './constants';
 import { WorkflowCategory, WorkflowDefinition, WorkflowFormat } from './types';
 
@@ -56,6 +57,19 @@ export function getWorkflowCategory(
   )
     ? WorkflowCategory.ASSESSMENT
     : WorkflowCategory.INFRASTRUCTURE;
+}
+
+export function getWorkflowCategoryDTO(
+  definition: WorkflowDefinition | undefined,
+): WorkflowCategoryDTO {
+  if (definition === undefined) {
+    return WorkflowCategoryDTO.INFRASTRUCTURE;
+  }
+  return definition?.annotations?.find(
+    annotation => annotation === ASSESSMENT_WORKFLOW_TYPE,
+  )
+    ? WorkflowCategoryDTO.ASSESSMENT
+    : WorkflowCategoryDTO.INFRASTRUCTURE;
 }
 
 function removeProperty<T>(obj: T, propToDelete: string): T {

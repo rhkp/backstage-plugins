@@ -1,5 +1,13 @@
+import moment from 'moment';
+
 import {
-  getWorkflowCategory,
+  getWorkflowCategoryDTO,
+  ProcessInstance,
+  ProcessInstanceState,
+  ProcessInstanceStatusDTO,
+  ProcessIntancesDTO,
+  WorkflowCategory,
+  WorkflowCategoryDTO,
   WorkflowDTO,
   WorkflowListResultDTO,
   WorkflowOverviewDTO,
@@ -50,7 +58,7 @@ export async function getWorkflows(sonataFlowService: SonataFlowService) {
     items: definitions.map(def => {
       return {
         annotations: def.definition.annotations,
-        category: getWorkflowCategory(def.definition),
+        category: getWorkflowCategoryDTO(def.definition),
         description: def.definition.description,
         name: def.definition.name,
         uri: def.uri,
@@ -83,10 +91,98 @@ export async function getWorkflowById(
   }
   return {
     annotations: definition.annotations,
-    category: getWorkflowCategory(definition),
+    category: getWorkflowCategoryDTO(definition),
     description: definition.description,
     name: definition.name,
     uri: uri,
     id: definition.id,
   };
+}
+
+export async function getInstances(
+  sonataFlowService: SonataFlowService,
+): Promise<ProcessIntancesDTO> {
+  const instances: ProcessInstance[] | undefined =
+    await sonataFlowService.fetchProcessInstances();
+
+  if (!instances) {
+    throw new Error("Couldn't fetch process instances");
+  }
+
+  const result = instances.map((def: ProcessInstance) => {
+    const start = moment(def.start?.toString());
+    const end = moment(def.end?.toString());
+    const duration = moment.duration(start.diff(end));
+    let variables: Record<string, unknown> | undefined;
+    if (typeof def?.variables === 'string') {
+      variables = JSON.parse(def?.variables);
+    } else {
+      variables = def?.variables;
+    }
+    return {
+      category: getWorkflowCategoryDTOFromWorkflowCategory(def.category),
+      description: def.description,
+      duration: duration.humanize(),
+      id: def.id,
+      name: def.processName,
+      // @ts-ignore
+      nextWorkflowSuggestions: def.variables?.workflowdata?.workflowOptions,
+      started: start.toDate().toLocaleString(),
+      status: getProcessInstancesDTOFromString(def.state),
+      workflow: def.processName || def.processId,
+    };
+  });
+
+  return result;
+}
+
+function getWorkflowCategoryDTOFromWorkflowCategory(
+  category?: WorkflowCategory,
+) {
+  switch (category) {
+    case WorkflowCategory.ASSESSMENT:
+      return WorkflowCategoryDTO.ASSESSMENT;
+    case WorkflowCategory.INFRASTRUCTURE:
+      return WorkflowCategoryDTO.INFRASTRUCTURE;
+    default:
+      return WorkflowCategoryDTO.INFRASTRUCTURE;
+  }
+}
+
+// function getProcessInstanceStatusDTOFromProcessInstaceState(state: ProcessInstanceState): ProcessInstanceStatusDTO{
+//   switch (state) {
+//     case ProcessInstanceState.Active:
+//       return ProcessInstanceStatusDTO.RUNNING;
+//     case ProcessInstanceState.Error:
+//       return ProcessInstanceStatusDTO.ERROR;
+//     case ProcessInstanceState.Completed:
+//       return ProcessInstanceStatusDTO.COMPLETED;
+//     case ProcessInstanceState.Aborted:
+//       return ProcessInstanceStatusDTO.ABORTED;
+//     case ProcessInstanceState.Suspended:
+//       return ProcessInstanceStatusDTO.SUSPENDED;
+//     default:
+//       // TODO: What is the default value?
+//       return ProcessInstanceStatusDTO.SUSPENDED;
+//   }
+//  }
+
+function getProcessInstancesDTOFromString(
+  state: string,
+): ProcessInstanceStatusDTO {
+  switch (state) {
+    case ProcessInstanceState.Active.valueOf():
+      return ProcessInstanceStatusDTO.RUNNING;
+    case ProcessInstanceState.Error.valueOf():
+      return ProcessInstanceStatusDTO.ERROR;
+    case ProcessInstanceState.Completed.valueOf():
+      return ProcessInstanceStatusDTO.COMPLETED;
+    case ProcessInstanceState.Aborted.valueOf():
+      return ProcessInstanceStatusDTO.ABORTED;
+    case ProcessInstanceState.Suspended.valueOf():
+      return ProcessInstanceStatusDTO.SUSPENDED;
+    default:
+      // TODO: What is the default value?
+      return ProcessInstanceStatusDTO.SUSPENDED;
+  }
 }

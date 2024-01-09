@@ -55,6 +55,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/v2/workflows/instances': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get instances
+     * @description Retrieve an array of instances
+     */
+    get: operations['getInstances'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/v2/workflows/overview': {
     parameters: {
       query?: never;
@@ -81,6 +101,28 @@ export interface components {
       offset?: number;
       totalCount?: number;
     };
+    /**
+     * @description Status of the workflow run
+     * @enum {string}
+     */
+    ProcessInstanceStatusDTO: ProcessInstanceStatusDTO;
+    ProcessIntanceDTO: {
+      'category?'?: components['schemas']['WorkflowCategoryDTO'];
+      'description?'?: string;
+      duration?: string;
+      id?: string;
+      name?: string;
+      'nextWorkflowSuggestions?'?: {
+        [key: string]:
+          | components['schemas']['WorkflowSuggestionDTO']
+          | undefined;
+      };
+      /** Format: date-time */
+      started?: string;
+      status?: components['schemas']['ProcessInstanceStatusDTO'];
+      workflow?: string;
+    };
+    ProcessIntancesDTO: unknown[];
     /**
      * @description Category of the workflow
      * @enum {string}
@@ -117,6 +159,10 @@ export interface components {
     WorkflowOverviewListResultDTO: {
       overviews?: components['schemas']['WorkflowOverviewDTO'][];
       paginationInfo?: components['schemas']['PaginationInfoDTO'];
+    };
+    WorkflowSuggestionDTO: {
+      suggestion?: string;
+      workflow?: string;
     };
   };
   responses: never;
@@ -229,6 +275,38 @@ export interface operations {
       };
     };
   };
+  getInstances: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ProcessIntancesDTO'];
+        };
+      };
+      /** @description Error fetching instances */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': {
+            /** @description Error message */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
   getWorkflowsOverview: {
     parameters: {
       query?: never;
@@ -261,6 +339,18 @@ export interface operations {
       };
     };
   };
+}
+export enum ProcessInstanceStatusDTO {
+  // Running
+  RUNNING = 'Running',
+  // Error
+  ERROR = 'Error',
+  // Completed
+  COMPLETED = 'Completed',
+  // Aborted
+  ABORTED = 'Aborted',
+  // Suspended
+  SUSPENDED = 'Suspended',
 }
 export enum WorkflowCategoryDTO {
   // Assessment Workflow

@@ -29,6 +29,7 @@ import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
 import {
+  getInstances,
   getWorkflowById,
   getWorkflowOverview,
   getWorkflowOverviewById,
@@ -360,6 +361,16 @@ function setupInternalRoutes(
 
     res.status(200).json(instances);
   });
+
+  // v2
+  api.register(
+    'getInstances',
+    async (c, req: express.Request, res: express.Response, next) => {
+      await getInstances(sonataFlowService)
+        .then(result => res.json(result))
+        .catch(next);
+    },
+  );
 
   router.get('/instances/:instanceId', async (req, res) => {
     const {
