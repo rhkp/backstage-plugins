@@ -12,6 +12,7 @@ import {
   WorkflowListResultDTO,
   WorkflowOverviewDTO,
   WorkflowOverviewListResultDTO,
+  WorkflowRunStatusDTO,
 } from '@janus-idp/backstage-plugin-orchestrator-common';
 
 import { SonataFlowService } from './SonataFlowService';
@@ -48,7 +49,9 @@ export async function getWorkflowOverviewById(
   return overviewObj;
 }
 
-export async function getWorkflows(sonataFlowService: SonataFlowService) {
+export async function getWorkflows(
+  sonataFlowService: SonataFlowService,
+): Promise<WorkflowListResultDTO> {
   const definitions = await sonataFlowService.fetchWorkflows();
 
   if (!definitions) {
@@ -134,6 +137,15 @@ export async function getInstances(
   });
 
   return result;
+}
+
+export async function getWorkflowStatuses(): Promise<WorkflowRunStatusDTO[]> {
+  const statusArray: WorkflowRunStatusDTO[] = Object.entries(
+    ProcessInstanceStatusDTO,
+  )
+    .filter(([key]) => isNaN(Number(key))) // Filter out numeric keys
+    .map(([key, value]) => ({ key, value }));
+  return statusArray;
 }
 
 function getWorkflowCategoryDTOFromWorkflowCategory(

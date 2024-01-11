@@ -10,6 +10,8 @@ export type ProcessIntanceDTO = components['schemas']['ProcessIntanceDTO'];
 export type ProcessIntancesDTO = components['schemas']['ProcessIntancesDTO'];
 export type ProcessInstanceStatusDTO2 =
   components['schemas']['ProcessInstanceStatusDTO'];
+export type WorkflowRunStatusDTO =
+  components['schemas']['WorkflowRunStatusDTO'];
 
 // FIXME - how to export imported enum
 export enum ProcessInstanceStatusDTO {

@@ -34,6 +34,7 @@ import {
   getWorkflowOverview,
   getWorkflowOverviewById,
   getWorkflows,
+  getWorkflowStatuses,
 } from './handlers';
 import { JiraEvent, JiraService } from './JiraService';
 import { OpenApiService } from './OpenApiService';
@@ -371,6 +372,17 @@ function setupInternalRoutes(
         .catch(next);
     },
   );
+
+  api.register(
+    'getWorkflowStatuses',
+    async (c, req: express.Request, res: express.Response, next) => {
+      await getWorkflowStatuses()
+        .then(result => res.json(result))
+        .catch(next);
+    },
+  );
+
+  // v2
 
   router.get('/instances/:instanceId', async (req, res) => {
     const {
