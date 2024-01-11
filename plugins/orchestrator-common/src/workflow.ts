@@ -1,8 +1,8 @@
 import { Specification } from '@severlessworkflow/sdk-typescript';
 import { dump } from 'js-yaml';
 
-import { WorkflowCategoryDTO } from '../api/models/schema';
 import { ASSESSMENT_WORKFLOW_TYPE } from './constants';
+import { WorkflowCategoryDTO } from './openapi_types';
 import { WorkflowCategory, WorkflowDefinition, WorkflowFormat } from './types';
 
 export function fromWorkflowSource(content: string): WorkflowDefinition {
