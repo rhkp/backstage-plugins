@@ -238,7 +238,7 @@ components:
         - Infrastructure Workflow
     ProcessIntancesDTO:
       type: array
-      item:
+      items:
         $ref: '#/components/schemas/ProcessIntanceDTO'
     ProcessIntanceDTO:
       type: object

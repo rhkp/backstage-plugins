@@ -122,7 +122,7 @@ export interface components {
       status?: components['schemas']['ProcessInstanceStatusDTO'];
       workflow?: string;
     };
-    ProcessIntancesDTO: unknown[];
+    ProcessIntancesDTO: components['schemas']['ProcessIntanceDTO'][];
     /**
      * @description Category of the workflow
      * @enum {string}
