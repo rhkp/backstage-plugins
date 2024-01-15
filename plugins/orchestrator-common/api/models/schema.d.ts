@@ -14,7 +14,8 @@ export interface paths {
     /** @description Get a list of workflow */
     get: operations['getWorkflows'];
     put?: never;
-    post?: never;
+    /** Create or update a workflow */
+    post: operations['createWorkflows'];
     delete?: never;
     options?: never;
     head?: never;
@@ -205,6 +206,26 @@ export interface operations {
       cookie?: never;
     };
     requestBody?: never;
+    responses: never;
+  };
+  createWorkflows: {
+    parameters: {
+      query?: {
+        /** @description URI parameter */
+        uri?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': {
+          body?: string;
+          uri: string;
+        };
+      };
+    };
     responses: {
       /** @description Success */
       200: {
@@ -213,6 +234,17 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['WorkflowListResultDTO'];
+        };
+      };
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': {
+            workflowItem?: components['schemas']['WorkflowDTO'];
+          };
         };
       };
       /** @description Error fetching workflow list */

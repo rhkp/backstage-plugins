@@ -68,6 +68,28 @@ paths:
     get:
       operationId: getWorkflows
       description: Get a list of workflow
+    post:
+      operationId: createWorkflows
+      summary: Create or update a workflow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uri:
+                  type: string
+                body:
+                  type: string
+              required:
+                - uri
+      parameters:
+        - name: uri
+          in: query
+          description: URI parameter
+          schema:
+            type: string
       responses:
         200:
           description: Success
@@ -75,6 +97,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WorkflowListResultDTO'
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  workflowItem:
+                    $ref: '#/components/schemas/WorkflowDTO'
         500:
           description: Error fetching workflow list
           content:
@@ -135,7 +166,7 @@ paths:
                   message:
                     type: string
                     description: Error message
-  /v2/workflows/statuses:
+  /v2/workflows/run/statuses:
     get:
       operationId: getWorkflowStatuses
       summary: Get workflow status list
@@ -148,7 +179,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/WorkflowRunStatusDTO'
 components:
   schemas:
     WorkflowOverviewListResultDTO:
@@ -306,3 +337,10 @@ components:
         - Completed
         - Aborted
         - Suspended
+    WorkflowRunStatusDTO:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
