@@ -231,7 +231,17 @@ export interface operations {
       cookie?: never;
     };
     requestBody?: never;
-    responses: never;
+    responses: {
+      /** @description Success */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['WorkflowListResultDTO'];
+        };
+      };
+    };
   };
   createWorkflows: {
     parameters: {
@@ -252,15 +262,6 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Success */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['WorkflowListResultDTO'];
-        };
-      };
       /** @description Created */
       201: {
         headers: {

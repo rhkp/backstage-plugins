@@ -68,6 +68,13 @@ paths:
     get:
       operationId: getWorkflows
       description: Get a list of workflow
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowListResultDTO'
     post:
       operationId: createWorkflows
       summary: Create or update a workflow
@@ -91,12 +98,6 @@ paths:
           schema:
             type: string
       responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WorkflowListResultDTO'
         201:
           description: Created
           content:
