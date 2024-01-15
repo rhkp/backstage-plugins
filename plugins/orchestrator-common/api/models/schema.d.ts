@@ -39,6 +39,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/v2/workflows/{workflowId}/execute': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Execute a workflow */
+    post: operations['executeWorkflow'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/v2/workflows/{workflowId}/overview': {
     parameters: {
       query?: never;
@@ -117,6 +134,14 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    ExecuteWorkflowRequestDTO: {
+      inputData: {
+        [key: string]: string | undefined;
+      };
+    };
+    ExecuteWorkflowResponse: {
+      id?: string;
+    };
     PaginationInfoDTO: {
       limit?: number;
       offset?: number;
@@ -292,6 +317,42 @@ export interface operations {
             /** @description Error message */
             message?: string;
           };
+        };
+      };
+    };
+  };
+  executeWorkflow: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description ID of the workflow to execute */
+        workflowId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExecuteWorkflowRequestDTO'];
+      };
+    };
+    responses: {
+      /** @description Successful execution */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ExecuteWorkflowResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/plain': string;
         };
       };
     };
