@@ -33,7 +33,8 @@ export interface paths {
     get: operations['getWorkflowById'];
     put?: never;
     post?: never;
-    delete?: never;
+    /** Delete a workflow */
+    delete: operations['deleteWorkflow'];
     options?: never;
     head?: never;
     patch?: never;
@@ -318,6 +319,36 @@ export interface operations {
             /** @description Error message */
             message?: string;
           };
+        };
+      };
+    };
+  };
+  deleteWorkflow: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description ID of the workflow to delete */
+        workflowId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful deletion */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/plain': string;
         };
       };
     };
