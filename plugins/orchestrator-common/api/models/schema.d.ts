@@ -4,526 +4,578 @@
  */
 
 export interface paths {
-  '/v2/workflows': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v2/specs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get workflow specifications */
+        get: operations["getWorkflowSpecs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get a list of workflow */
-    get: operations['getWorkflows'];
-    put?: never;
-    /** Create or update a workflow */
-    post: operations['createWorkflows'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/v2/workflows/{workflowId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v2/workflows": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get a list of workflow */
+        get: operations["getWorkflows"];
+        put?: never;
+        /** Create or update a workflow */
+        post: operations["createWorkflows"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get a workflow by ID */
-    get: operations['getWorkflowById'];
-    put?: never;
-    post?: never;
-    /** Delete a workflow */
-    delete: operations['deleteWorkflow'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/v2/workflows/{workflowId}/execute': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v2/workflows/{workflowId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get a workflow by ID */
+        get: operations["getWorkflowById"];
+        put?: never;
+        post?: never;
+        /** Delete a workflow */
+        delete: operations["deleteWorkflow"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Execute a workflow */
-    post: operations['executeWorkflow'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/v2/workflows/{workflowId}/overview': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v2/workflows/{workflowId}/execute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Execute a workflow */
+        post: operations["executeWorkflow"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get a workflow overview by ID */
-    get: operations['getWorkflowOverviewById'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/v2/workflows/instances': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v2/workflows/{workflowId}/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get a workflow overview by ID */
+        get: operations["getWorkflowOverviewById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Get instances
-     * @description Retrieve an array of instances
-     */
-    get: operations['getInstances'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/v2/workflows/overview': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v2/workflows/instances": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get instances
+         * @description Retrieve an array of instances
+         */
+        get: operations["getInstances"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get a list of workflow overviews */
-    get: operations['getWorkflowsOverview'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/v2/workflows/run/statuses': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v2/workflows/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get a list of workflow overviews */
+        get: operations["getWorkflowsOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Get workflow status list
-     * @description Retrieve an array of workflow statuses as string
-     */
-    get: operations['getWorkflowStatuses'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+    "/v2/workflows/run/statuses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get workflow status list
+         * @description Retrieve an array of workflow statuses as string
+         */
+        get: operations["getWorkflowStatuses"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    ExecuteWorkflowRequestDTO: {
-      inputData: {
-        [key: string]: string | undefined;
-      };
+    schemas: {
+        ExecuteWorkflowRequestDTO: {
+            inputData: {
+                [key: string]: string | undefined;
+            };
+        };
+        ExecuteWorkflowResponse: {
+            id?: string;
+        };
+        PaginationInfoDTO: {
+            limit?: number;
+            offset?: number;
+            totalCount?: number;
+        };
+        /**
+         * @description Status of the workflow run
+         * @enum {string}
+         */
+        ProcessInstanceStatusDTO: ProcessInstanceStatusDTO;
+        ProcessIntanceDTO: {
+            "category?"?: components["schemas"]["WorkflowCategoryDTO"];
+            "description?"?: string;
+            duration?: string;
+            id?: string;
+            name?: string;
+            "nextWorkflowSuggestions?"?: {
+                [key: string]: components["schemas"]["WorkflowSuggestionDTO"] | undefined;
+            };
+            /** Format: date-time */
+            started?: string;
+            status?: components["schemas"]["ProcessInstanceStatusDTO"];
+            workflow?: string;
+        };
+        ProcessIntancesDTO: components["schemas"]["ProcessIntanceDTO"][];
+        /**
+         * @description Category of the workflow
+         * @enum {string}
+         */
+        WorkflowCategoryDTO: WorkflowCategoryDTO;
+        WorkflowContentDTO: {
+            /** @description JSON string */
+            content?: string;
+        };
+        WorkflowDTO: {
+            annotations?: string[];
+            category: components["schemas"]["WorkflowCategoryDTO"];
+            /** @description Description of the workflow */
+            description?: string;
+            /** @description Workflow unique identifier */
+            id: string;
+            /** @description Workflow name */
+            name?: string;
+            /** @description URI of the workflow definition */
+            uri: string;
+        };
+        WorkflowListResultDTO: {
+            items: components["schemas"]["WorkflowDTO"][];
+            paginationInfo: components["schemas"]["PaginationInfoDTO"];
+        };
+        WorkflowOverviewDTO: {
+            avgDurationMs?: number;
+            description?: string;
+            lastRunStatus?: string;
+            lastTriggeredMs?: number;
+            /** @description Workflow name */
+            name?: string;
+            type?: string;
+            uri?: string;
+            /** @description Workflow unique identifier */
+            workflowId?: string;
+        };
+        WorkflowOverviewListResultDTO: {
+            overviews?: components["schemas"]["WorkflowOverviewDTO"][];
+            paginationInfo?: components["schemas"]["PaginationInfoDTO"];
+        };
+        WorkflowRunStatusDTO: {
+            key?: string;
+            value?: string;
+        };
+        WorkflowSpecFileDTO: {
+            content?: components["schemas"]["WorkflowContentDTO"];
+            path?: string;
+        };
+        WorkflowSuggestionDTO: {
+            suggestion?: string;
+            workflow?: string;
+        };
     };
-    ExecuteWorkflowResponse: {
-      id?: string;
-    };
-    PaginationInfoDTO: {
-      limit?: number;
-      offset?: number;
-      totalCount?: number;
-    };
-    /**
-     * @description Status of the workflow run
-     * @enum {string}
-     */
-    ProcessInstanceStatusDTO: ProcessInstanceStatusDTO;
-    ProcessIntanceDTO: {
-      'category?'?: components['schemas']['WorkflowCategoryDTO'];
-      'description?'?: string;
-      duration?: string;
-      id?: string;
-      name?: string;
-      'nextWorkflowSuggestions?'?: {
-        [key: string]:
-          | components['schemas']['WorkflowSuggestionDTO']
-          | undefined;
-      };
-      /** Format: date-time */
-      started?: string;
-      status?: components['schemas']['ProcessInstanceStatusDTO'];
-      workflow?: string;
-    };
-    ProcessIntancesDTO: components['schemas']['ProcessIntanceDTO'][];
-    /**
-     * @description Category of the workflow
-     * @enum {string}
-     */
-    WorkflowCategoryDTO: WorkflowCategoryDTO;
-    WorkflowDTO: {
-      annotations?: string[];
-      category: components['schemas']['WorkflowCategoryDTO'];
-      /** @description Description of the workflow */
-      description?: string;
-      /** @description Workflow unique identifier */
-      id: string;
-      /** @description Workflow name */
-      name?: string;
-      /** @description URI of the workflow definition */
-      uri: string;
-    };
-    WorkflowListResultDTO: {
-      items: components['schemas']['WorkflowDTO'][];
-      paginationInfo: components['schemas']['PaginationInfoDTO'];
-    };
-    WorkflowOverviewDTO: {
-      avgDurationMs?: number;
-      description?: string;
-      lastRunStatus?: string;
-      lastTriggeredMs?: number;
-      /** @description Workflow name */
-      name?: string;
-      type?: string;
-      uri?: string;
-      /** @description Workflow unique identifier */
-      workflowId?: string;
-    };
-    WorkflowOverviewListResultDTO: {
-      overviews?: components['schemas']['WorkflowOverviewDTO'][];
-      paginationInfo?: components['schemas']['PaginationInfoDTO'];
-    };
-    WorkflowRunStatusDTO: {
-      key?: string;
-      value?: string;
-    };
-    WorkflowSuggestionDTO: {
-      suggestion?: string;
-      workflow?: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  getWorkflows: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    getWorkflowSpecs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful retrieval of workflow specifications */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowSpecFileDTO"][];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Success */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    getWorkflows: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          'application/json': components['schemas']['WorkflowListResultDTO'];
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowListResultDTO"];
+                };
+            };
         };
-      };
     };
-  };
-  createWorkflows: {
-    parameters: {
-      query?: {
-        /** @description URI parameter */
-        uri?: string;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
+    createWorkflows: {
+        parameters: {
+            query?: {
+                /** @description URI parameter */
+                uri?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    body?: string;
+                    uri: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        workflowItem?: components["schemas"]["WorkflowDTO"];
+                    };
+                };
+            };
+            /** @description Error fetching workflow list */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Error message */
+                        message?: string;
+                    };
+                };
+            };
+        };
     };
-    requestBody: {
-      content: {
-        'application/json': {
-          body?: string;
-          uri: string;
+    getWorkflowById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Unique identifier of the workflow */
+                workflowId: string;
+            };
+            cookie?: never;
         };
-      };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowDTO"];
+                };
+            };
+            /** @description Error fetching workflow */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Error message */
+                        message?: string;
+                    };
+                };
+            };
+        };
     };
-    responses: {
-      /** @description Created */
-      201: {
-        headers: {
-          [name: string]: unknown;
+    deleteWorkflow: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the workflow to delete */
+                workflowId: string;
+            };
+            cookie?: never;
         };
-        content: {
-          'application/json': {
-            workflowItem?: components['schemas']['WorkflowDTO'];
-          };
+        requestBody?: never;
+        responses: {
+            /** @description Successful deletion */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
         };
-      };
-      /** @description Error fetching workflow list */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            /** @description Error message */
-            message?: string;
-          };
-        };
-      };
     };
-  };
-  getWorkflowById: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        /** @description Unique identifier of the workflow */
-        workflowId: string;
-      };
-      cookie?: never;
+    executeWorkflow: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the workflow to execute */
+                workflowId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExecuteWorkflowRequestDTO"];
+            };
+        };
+        responses: {
+            /** @description Successful execution */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExecuteWorkflowResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Success */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    getWorkflowOverviewById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Unique identifier of the workflow */
+                workflowId: string;
+            };
+            cookie?: never;
         };
-        content: {
-          'application/json': components['schemas']['WorkflowDTO'];
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowOverviewDTO"];
+                };
+            };
+            /** @description Error fetching workflow overview */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Error message */
+                        message?: string;
+                    };
+                };
+            };
         };
-      };
-      /** @description Error fetching workflow */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            /** @description Error message */
-            message?: string;
-          };
-        };
-      };
     };
-  };
-  deleteWorkflow: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        /** @description ID of the workflow to delete */
-        workflowId: string;
-      };
-      cookie?: never;
+    getInstances: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProcessIntancesDTO"];
+                };
+            };
+            /** @description Error fetching instances */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Error message */
+                        message?: string;
+                    };
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Successful deletion */
-      201: {
-        headers: {
-          [name: string]: unknown;
+    getWorkflowsOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content?: never;
-      };
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown;
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowOverviewListResultDTO"];
+                };
+            };
+            /** @description Error fetching workflow overviews */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Error message */
+                        message?: string;
+                    };
+                };
+            };
         };
-        content: {
-          'text/plain': string;
-        };
-      };
     };
-  };
-  executeWorkflow: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        /** @description ID of the workflow to execute */
-        workflowId: string;
-      };
-      cookie?: never;
+    getWorkflowStatuses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunStatusDTO"][];
+                };
+            };
+        };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ExecuteWorkflowRequestDTO'];
-      };
-    };
-    responses: {
-      /** @description Successful execution */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ExecuteWorkflowResponse'];
-        };
-      };
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'text/plain': string;
-        };
-      };
-    };
-  };
-  getWorkflowOverviewById: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        /** @description Unique identifier of the workflow */
-        workflowId: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Success */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['WorkflowOverviewDTO'];
-        };
-      };
-      /** @description Error fetching workflow overview */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            /** @description Error message */
-            message?: string;
-          };
-        };
-      };
-    };
-  };
-  getInstances: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Success */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ProcessIntancesDTO'];
-        };
-      };
-      /** @description Error fetching instances */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            /** @description Error message */
-            message?: string;
-          };
-        };
-      };
-    };
-  };
-  getWorkflowsOverview: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Success */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['WorkflowOverviewListResultDTO'];
-        };
-      };
-      /** @description Error fetching workflow overviews */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            /** @description Error message */
-            message?: string;
-          };
-        };
-      };
-    };
-  };
-  getWorkflowStatuses: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Success */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['WorkflowRunStatusDTO'][];
-        };
-      };
-    };
-  };
 }
 export enum ProcessInstanceStatusDTO {
-  // Running
-  RUNNING = 'Running',
-  // Error
-  ERROR = 'Error',
-  // Completed
-  COMPLETED = 'Completed',
-  // Aborted
-  ABORTED = 'Aborted',
-  // Suspended
-  SUSPENDED = 'Suspended',
+    // Running
+    RUNNING = "Running",
+    // Error
+    ERROR = "Error",
+    // Completed
+    COMPLETED = "Completed",
+    // Aborted
+    ABORTED = "Aborted",
+    // Suspended
+    SUSPENDED = "Suspended"
 }
 export enum WorkflowCategoryDTO {
-  // Assessment Workflow
-  ASSESSMENT = 'assessment',
-  // Infrastructure Workflow
-  INFRASTRUCTURE = 'infrastructure',
+    // Assessment Workflow
+    ASSESSMENT = "assessment",
+    // Infrastructure Workflow
+    INFRASTRUCTURE = "infrastructure"
 }
