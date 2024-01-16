@@ -3,11 +3,10 @@ import React from 'react';
 import { Table } from '@backstage/core-components';
 
 import { makeStyles } from '@material-ui/core';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
 
 import { useRoles } from '../../hooks/useRoles';
 import { RolesData } from '../../types';
+import { SnackbarAlert } from '../SnackbarAlert';
 import { useToast } from '../ToastContext';
 import { useDeleteDialog } from './DeleteDialogContext';
 import DeleteRoleDialog from './DeleteRoleDialog';
@@ -28,7 +27,8 @@ export const RolesList = () => {
 
   const [roles, setRoles] = React.useState<number | undefined>();
   const classes = useStyles();
-  const { loading, data, retry, createRoleAllowed } = useRoles();
+  const { loading, data, retry, createRoleAllowed, createRoleLoading } =
+    useRoles();
 
   const closeDialog = () => {
     setOpenDialog(false);
@@ -44,25 +44,11 @@ export const RolesList = () => {
 
   return (
     <>
-      <Snackbar
-        open={toastMessage !== ''}
-        autoHideDuration={6000}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        sx={{ width: '100%' }}
-        style={{ top: '100px', right: '20px' }}
-        onClose={onAlertClose}
-      >
-        <Alert
-          onClose={onAlertClose}
-          severity="info"
-          variant="filled"
-          icon={false}
-          sx={{ width: '60%' }}
-        >
-          {toastMessage}
-        </Alert>
-      </Snackbar>
-      <RolesListToolbar createRoleAllowed={createRoleAllowed} />
+      <SnackbarAlert toastMessage={toastMessage} onAlertClose={onAlertClose} />
+      <RolesListToolbar
+        createRoleAllowed={createRoleAllowed}
+        createRoleLoading={createRoleLoading}
+      />
       <Table
         title={
           !loading && data?.length
