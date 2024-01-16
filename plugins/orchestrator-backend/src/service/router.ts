@@ -14,6 +14,8 @@ import {
   fromWorkflowSource,
   ORCHESTRATOR_SERVICE_READY_TOPIC,
   WorkflowDataInputSchemaResponse,
+  WorkflowDefinition,
+  WorkflowInfo,
   WorkflowItem,
   WorkflowListResult,
   WorkflowOverviewListResult,
@@ -23,8 +25,6 @@ import path from 'path';
 
 import { RouterArgs } from '../routerWrapper';
 import { ApiResponseBuilder } from '../types/apiResponse';
-import { BackendExecCtx } from '../types/backendExecCtx';
-import { DEFAULT_DATA_INDEX_URL } from '../types/constants';
 import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
@@ -165,16 +165,6 @@ export async function createBackendRouter(
 
   router.use(errorHandler());
   return router;
-}
-
-function initDataIndexService(logger: Logger, config: Config) {
-  const dataIndexUrl =
-    config.getOptionalString('orchestrator.dataIndexService.url') ||
-    DEFAULT_DATA_INDEX_URL;
-  const client = DataIndexService.getNewGraphQLClient(dataIndexUrl);
-  const backendExecCtx = new BackendExecCtx(logger, client, dataIndexUrl);
-
-  DataIndexService.initialize(backendExecCtx);
 }
 
 // ======================================================
