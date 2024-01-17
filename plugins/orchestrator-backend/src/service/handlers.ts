@@ -16,6 +16,7 @@ import {
   WorkflowRunStatusDTO,
 } from '@janus-idp/backstage-plugin-orchestrator-common';
 
+import { DataIndexService } from './DataIndexService';
 import { SonataFlowService } from './SonataFlowService';
 
 export async function getWorkflowOverviewV1(
@@ -117,20 +118,26 @@ export async function getWorkflowById(
   };
 }
 
-export async function getInstances(
-  sonataFlowService: SonataFlowService,
-): Promise<ProcessIntancesDTO> {
-  const instances: ProcessInstance[] | undefined =
-    await sonataFlowService.fetchProcessInstances();
+export async function getInstancesV1(
+  dataIndexService: DataIndexService,
+): Promise<ProcessInstance[]> {
+  const instances = await dataIndexService.fetchProcessInstances();
 
   if (!instances) {
     throw new Error("Couldn't fetch process instances");
   }
+  return instances;
+}
 
+export async function getInstancesV2(
+  dataIndexService: DataIndexService,
+): Promise<ProcessIntancesDTO> {
+  const instances = await getInstancesV1(dataIndexService);
   const result = instances.map((def: ProcessInstance) => {
     const start = moment(def.start?.toString());
     const end = moment(def.end?.toString());
     const duration = moment.duration(start.diff(end));
+
     let variables: Record<string, unknown> | undefined;
     if (typeof def?.variables === 'string') {
       variables = JSON.parse(def?.variables);
@@ -144,7 +151,7 @@ export async function getInstances(
       id: def.id,
       name: def.processName,
       // @ts-ignore
-      nextWorkflowSuggestions: def.variables?.workflowdata?.workflowOptions,
+      nextWorkflowSuggestions: variables?.workflowdata?.workflowOptions,
       started: start.toDate().toLocaleString(),
       status: getProcessInstancesDTOFromString(def.state),
       workflow: def.processName || def.processId,
