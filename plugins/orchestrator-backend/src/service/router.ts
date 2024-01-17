@@ -31,7 +31,8 @@ import { DataInputSchemaService } from './DataInputSchemaService';
 import {
   getInstancesV1,
   getInstancesV2,
-  getWorkflowById,
+  getWorkflowByIdV1,
+  getWorkflowByIdV2,
   getWorkflowOverviewById,
   getWorkflowOverviewV1,
   getWorkflowOverviewV2,
@@ -233,36 +234,22 @@ function setupInternalRoutes(
     const {
       params: { workflowId },
     } = req;
-
-    const definition =
-      await sonataFlowService.fetchWorkflowDefinition(workflowId);
-
-    if (!definition) {
-      res
-        .status(500)
-        .send(`Couldn't fetch workflow definition for ${workflowId}`);
-      return;
-    }
-
-    const uri = await sonataFlowService.fetchWorkflowUri(workflowId);
-    if (!uri) {
-      res.status(500).send(`Couldn't fetch workflow uri for ${workflowId}`);
-      return;
-    }
-
-    res.status(200).json({
-      uri,
-      definition,
-    });
+    await getWorkflowByIdV1(sonataFlowService, workflowId)
+      .then(result => res.status(200).json(result))
+      .catch(error => {
+        res.status(500).send(error.message || 'Internal Server Error');
+      });
   });
   // v2
   api.register('getWorkflowById', async (c, req, res, next) => {
-    const {
-      params: { workflowId },
-    } = req;
-    await getWorkflowById(sonataFlowService, workflowId)
-      .then(result => res.json(result))
-      .catch(next);
+    const workflowId = c.request.params.workflowId as string;
+
+    await getWorkflowByIdV2(sonataFlowService, workflowId)
+      .then(result => res.status(200).json(result))
+      .catch(error => {
+        res.status(500).send(error.message || 'Internal Server Error');
+        next();
+      });
   });
 
   router.delete('/workflows/:workflowId/abort', async (req, res) => {

@@ -131,10 +131,10 @@ export async function getWorkflowsV2(
   return result;
 }
 
-export async function getWorkflowById(
+export async function getWorkflowByIdV1(
   sonataFlowService: SonataFlowService,
   workflowId: string,
-): Promise<WorkflowDTO> {
+): Promise<{ uri: string; definition: WorkflowDefinition }> {
   const definition =
     await sonataFlowService.fetchWorkflowDefinition(workflowId);
 
@@ -146,13 +146,21 @@ export async function getWorkflowById(
   if (!uri) {
     throw new Error(`Couldn't fetch workflow uri for ${workflowId}`);
   }
+
+  return { uri, definition };
+}
+export async function getWorkflowByIdV2(
+  sonataFlowService: SonataFlowService,
+  workflowId: string,
+): Promise<WorkflowDTO> {
+  const resultV1 = await getWorkflowByIdV1(sonataFlowService, workflowId);
   return {
-    annotations: definition.annotations,
-    category: getWorkflowCategoryDTO(definition),
-    description: definition.description,
-    name: definition.name,
-    uri: uri,
-    id: definition.id,
+    annotations: resultV1.definition.annotations,
+    category: getWorkflowCategoryDTO(resultV1.definition),
+    description: resultV1.definition.description,
+    name: resultV1.definition.name,
+    uri: resultV1.uri,
+    id: resultV1.definition.id,
   };
 }
 
