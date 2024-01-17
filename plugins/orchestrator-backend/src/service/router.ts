@@ -34,6 +34,7 @@ import {
   getWorkflowByIdV1,
   getWorkflowByIdV2,
   getWorkflowOverviewById,
+  getWorkflowOverviewByIdV1,
   getWorkflowOverviewV1,
   getWorkflowOverviewV2,
   getWorkflowStatuses,
@@ -295,25 +296,20 @@ function setupInternalRoutes(
     const {
       params: { workflowId },
     } = req;
-    const overviewObj =
-      await sonataFlowService.fetchWorkflowOverview(workflowId);
 
-    if (!overviewObj) {
-      res
-        .status(500)
-        .send(`Couldn't fetch workflow overview for ${workflowId}`);
-      return;
-    }
-    res.status(200).json(overviewObj);
+    await getWorkflowOverviewByIdV1(sonataFlowService, workflowId)
+      .then(result => res.status(200).json(result))
+      .catch(error => {
+        res.status(500).send(error.message || 'Internal Server Error');
+      });
   });
 
   // v2
   api.register(
     'getWorkflowOverviewById',
     async (c, req: express.Request, res: express.Response, next) => {
-      const {
-        params: { workflowId },
-      } = req;
+      const workflowId = c.request.params.workflowId as string;
+
       await getWorkflowOverviewById(sonataFlowService, workflowId)
         .then(result => res.json(result))
         .catch(next);

@@ -14,6 +14,7 @@ import {
   WorkflowItem,
   WorkflowListResult,
   WorkflowListResultDTO,
+  WorkflowOverview,
   WorkflowOverviewDTO,
   WorkflowOverviewListResult,
   WorkflowOverviewListResultDTO,
@@ -57,11 +58,26 @@ export async function getWorkflowOverviewV2(
   return result;
 }
 
+export async function getWorkflowOverviewByIdV1(
+  sonataFlowService: SonataFlowService,
+  workflowId: string,
+): Promise<WorkflowOverview> {
+  const overviewObj = await sonataFlowService.fetchWorkflowOverview(workflowId);
+
+  if (!overviewObj) {
+    throw new Error(`Couldn't fetch workflow overview for ${workflowId}`);
+  }
+  return overviewObj;
+}
+
 export async function getWorkflowOverviewById(
   sonataFlowService: SonataFlowService,
   workflowId: string,
 ): Promise<WorkflowOverviewDTO> {
-  const overviewObj = await sonataFlowService.fetchWorkflowOverview(workflowId);
+  const overviewObj = await getWorkflowOverviewByIdV1(
+    sonataFlowService,
+    workflowId,
+  );
 
   if (!overviewObj) {
     throw new Error(`Couldn't fetch workflow overview for ${workflowId}`);
