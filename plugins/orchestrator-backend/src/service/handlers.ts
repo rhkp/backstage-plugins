@@ -8,7 +8,11 @@ import {
   ProcessIntancesDTO,
   WorkflowCategory,
   WorkflowCategoryDTO,
+  WorkflowDefinition,
   WorkflowDTO,
+  WorkflowInfo,
+  WorkflowItem,
+  WorkflowListResult,
   WorkflowListResultDTO,
   WorkflowOverviewDTO,
   WorkflowOverviewListResult,
@@ -65,16 +69,50 @@ export async function getWorkflowOverviewById(
   return overviewObj;
 }
 
-export async function getWorkflows(
+export async function getWorkflowsV1(
   sonataFlowService: SonataFlowService,
-): Promise<WorkflowListResultDTO> {
-  const definitions = await sonataFlowService.fetchWorkflows();
+  dataIndexService: DataIndexService,
+): Promise<WorkflowListResult> {
+  const definitions: WorkflowInfo[] =
+    await dataIndexService.getWorkflowDefinitions();
+  const items: WorkflowItem[] = await Promise.all(
+    definitions.map(async info => {
+      const uri = await sonataFlowService.fetchWorkflowUri(info.id);
+      if (!uri) {
+        throw new Error(`Uri is required for workflow ${info.id}`);
+      }
+      const item: WorkflowItem = {
+        definition: info as WorkflowDefinition,
+        serviceUrl: info.serviceUrl,
+        uri,
+      };
+      return item;
+    }),
+  );
 
-  if (!definitions) {
+  if (!items) {
     throw new Error("Couldn't fetch workflows");
   }
+
+  const result: WorkflowListResult = {
+    items: items,
+    limit: 0,
+    offset: 0,
+    totalCount: items?.length ?? 0,
+  };
+
+  return result;
+}
+export async function getWorkflowsV2(
+  sonataFlowService: SonataFlowService,
+  dataIndexService: DataIndexService,
+): Promise<WorkflowListResultDTO> {
+  const definitions: WorkflowListResult = await getWorkflowsV1(
+    sonataFlowService,
+    dataIndexService,
+  );
   const result: WorkflowListResultDTO = {
-    items: definitions.map(def => {
+    items: definitions.items.map(def => {
       return {
         annotations: def.definition.annotations,
         category: getWorkflowCategoryDTO(def.definition),
@@ -85,9 +123,9 @@ export async function getWorkflows(
       };
     }),
     paginationInfo: {
-      limit: 0,
-      offset: 0,
-      totalCount: definitions?.length ?? 0,
+      limit: definitions.limit,
+      offset: definitions.offset,
+      totalCount: definitions.totalCount,
     },
   };
   return result;

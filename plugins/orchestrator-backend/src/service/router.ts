@@ -29,13 +29,15 @@ import { CloudEventService } from './CloudEventService';
 import { DataIndexService } from './DataIndexService';
 import { DataInputSchemaService } from './DataInputSchemaService';
 import {
-  getInstances,
+  getInstancesV1,
+  getInstancesV2,
   getWorkflowById,
   getWorkflowOverviewById,
   getWorkflowOverviewV1,
   getWorkflowOverviewV2,
-  getWorkflows,
   getWorkflowStatuses,
+  getWorkflowsV1,
+  getWorkflowsV2,
 } from './handlers';
 import { JiraEvent, JiraService } from './JiraService';
 import { OpenApiService } from './OpenApiService';
@@ -208,43 +210,23 @@ function setupInternalRoutes(
     },
   );
 
-  router.get('/workflows', async (_, res) => {
-    const definitions: WorkflowInfo[] =
-      await dataIndexService.getWorkflowDefinitions();
-    const items: WorkflowItem[] = await Promise.all(
-      definitions.map(async info => {
-        const uri = await sonataFlowService.fetchWorkflowUri(info.id);
-        if (!uri) {
-          throw new Error(`Uri is required for workflow ${info.id}`);
-        }
-        const item: WorkflowItem = {
-          definition: info as WorkflowDefinition,
-          serviceUrl: info.serviceUrl,
-          uri,
-        };
-        return item;
-      }),
-    );
-
-    if (!items) {
-      res.status(500).send("Couldn't fetch workflows");
-      return;
-    }
-
-    const result: WorkflowListResult = {
-      items: items,
-      limit: 0,
-      offset: 0,
-      totalCount: items?.length ?? 0,
-    };
-    res.status(200).json(result);
+  router.get('/workflows', async (_, res, next) => {
+    await getWorkflowsV1(sonataFlowService, dataIndexService)
+      .then(result => res.status(200).json(result))
+      .catch(error => {
+        res.status(500).send(error.message || 'Internal Server Error');
+        next();
+      });
   });
 
   // v2
   api.register('getWorkflows', async (c, req, res, next) => {
-    await getWorkflows(sonataFlowService)
+    await getWorkflowsV2(sonataFlowService, dataIndexService)
       .then(result => res.json(result))
-      .catch(next);
+      .catch(error => {
+        res.status(500).send(error.message || 'Internal Server Error');
+        next();
+      });
   });
 
   router.get('/workflows/:workflowId', async (req, res) => {
@@ -351,22 +333,20 @@ function setupInternalRoutes(
     },
   );
 
-  router.get('/instances', async (_, res) => {
-    const instances = await dataIndexService.fetchProcessInstances();
-
-    if (!instances) {
-      res.status(500).send("Couldn't fetch process instances");
-      return;
-    }
-
-    res.status(200).json(instances);
+  router.get('/instances', async (_, res, next) => {
+    await getInstancesV1(dataIndexService)
+      .then(result => res.status(200).json(result))
+      .catch(error => {
+        res.status(500).send(error.message || 'Internal Server Error');
+        next();
+      });
   });
 
   // v2
   api.register(
     'getInstances',
     async (c, req: express.Request, res: express.Response, next) => {
-      await getInstances(sonataFlowService)
+      await getInstancesV2(dataIndexService)
         .then(result => res.json(result))
         .catch(next);
     },
@@ -387,6 +367,7 @@ function setupInternalRoutes(
     const {
       params: { instanceId },
     } = req;
+
     const instance = await dataIndexService.fetchProcessInstance(instanceId);
 
     if (!instance) {
