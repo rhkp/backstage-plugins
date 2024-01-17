@@ -31,8 +31,9 @@ import { DataInputSchemaService } from './DataInputSchemaService';
 import {
   getInstances,
   getWorkflowById,
-  getWorkflowOverview,
   getWorkflowOverviewById,
+  getWorkflowOverviewV1,
+  getWorkflowOverviewV2,
   getWorkflows,
   getWorkflowStatuses,
 } from './handlers';
@@ -185,31 +186,25 @@ function setupInternalRoutes(
     response.json(ApiResponseBuilder.SUCCESS_RESPONSE(swfs));
   });
 
-  router.get('/workflows/overview', async (_, res) => {
-    const overviews = await sonataFlowService.fetchWorkflowOverviews();
-
-    if (!overviews) {
-      res.status(500).send("Couldn't fetch workflow overviews");
-      return;
-    }
-
-    const result: WorkflowOverviewListResult = {
-      items: overviews,
-      limit: 0,
-      offset: 0,
-      totalCount: overviews?.length ?? 0,
-    };
-    res.status(200).json(result);
+  router.get('/workflows/overview', async (_, res, next) => {
+    await getWorkflowOverviewV1(sonataFlowService)
+      .then(result => res.status(200).json(result))
+      .catch(error => {
+        res.status(500).send(error.message || 'Internal Server Error');
+        next();
+      });
   });
 
   // v2
   api.register(
     'getWorkflowsOverview',
     async (c, _, res: express.Response, next) => {
-      console.log(c.request);
-      await getWorkflowOverview(sonataFlowService)
+      await getWorkflowOverviewV2(sonataFlowService)
         .then(result => res.json(result))
-        .catch(next);
+        .catch(error => {
+          res.status(500).send(error.message || 'Internal Server Error');
+          next();
+        });
     },
   );
 
