@@ -108,6 +108,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v2/workflows/{workflowId}/progress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Workflow Progress */
+        get: operations["getWrokflowProgress"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v2/workflows/instances": {
         parameters: {
             query?: never;
@@ -211,6 +228,33 @@ export interface components {
         ExecuteWorkflowResponse: {
             id?: string;
         };
+        NodeInstanceDTO: {
+            /**
+             * @description Type name
+             * @default NodeInstance
+             */
+            __typename: string;
+            /** @description Definition ID */
+            definitionId?: string;
+            /**
+             * Format: date-time
+             * @description Date when the node was entered
+             */
+            enter?: string;
+            /**
+             * Format: date-time
+             * @description Date when the node was exited (optional)
+             */
+            exit?: string;
+            /** @description Node instance ID */
+            id?: string;
+            /** @description Node name */
+            name?: string;
+            /** @description Node ID */
+            nodeId?: string;
+            /** @description Node type */
+            type?: string;
+        };
         PaginationInfoDTO: {
             limit?: number;
             offset?: number;
@@ -233,6 +277,17 @@ export interface components {
             started?: string;
             status?: components["schemas"]["ProcessInstanceStatusDTO"];
             workflow?: string;
+        };
+        ProcessInstanceError: {
+            /**
+             * @description Type name
+             * @default ProcessInstanceError
+             */
+            __typename: string;
+            /** @description Error message (optional) */
+            message?: string;
+            /** @description Node definition ID */
+            nodeDefinitionId?: string;
         };
         ProcessInstancesDTO: components["schemas"]["ProcessInstanceDTO"][];
         /**
@@ -280,6 +335,10 @@ export interface components {
         WorkflowOverviewListResultDTO: {
             overviews?: components["schemas"]["WorkflowOverviewDTO"][];
             paginationInfo?: components["schemas"]["PaginationInfoDTO"];
+        };
+        WorkflowProgressDTO: components["schemas"]["NodeInstanceDTO"] & {
+            error?: components["schemas"]["ProcessInstanceError"];
+            status?: components["schemas"]["ProcessInstanceStatusDTO"];
         };
         WorkflowRunStatusDTO: {
             key?: string;
@@ -557,6 +616,38 @@ export interface operations {
             };
             /** @description Bad Request */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+        };
+    };
+    getWrokflowProgress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Unique identifier of the workflow */
+                workflowId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowProgressDTO"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };
