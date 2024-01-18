@@ -370,11 +370,11 @@ components:
           format: date-time
         duration:
           type: string
-        category?:
+        category:
           $ref: '#/components/schemas/WorkflowCategoryDTO'
-        description?:
+        description:
           type: string
-        nextWorkflowSuggestions?:
+        nextWorkflowSuggestions:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/WorkflowSuggestionDTO'
