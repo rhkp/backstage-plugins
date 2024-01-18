@@ -12,23 +12,3 @@ export type ProcessInstanceStatusDTO2 =
   components['schemas']['ProcessInstanceStatusDTO'];
 export type WorkflowRunStatusDTO =
   components['schemas']['WorkflowRunStatusDTO'];
-
-// FIXME - how to export imported enum
-export enum ProcessInstanceStatusDTO {
-  // Running
-  RUNNING = 'Running',
-  // Error
-  ERROR = 'Error',
-  // Completed
-  COMPLETED = 'Completed',
-  // Aborted
-  ABORTED = 'Aborted',
-  // Suspended
-  SUSPENDED = 'Suspended',
-}
-export enum WorkflowCategoryDTO {
-  // Assessment Workflow
-  ASSESSMENT = 'assessment',
-  // Infrastructure Workflow
-  INFRASTRUCTURE = 'infrastructure',
-}
