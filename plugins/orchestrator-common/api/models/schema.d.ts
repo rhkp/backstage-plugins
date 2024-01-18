@@ -91,6 +91,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v2/workflows/{workflowId}/parameters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get input parameters by steps */
+        get: operations["getParametersByStep"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v2/workflows/instances": {
         parameters: {
             query?: never;
@@ -182,6 +199,12 @@ export interface components {
             offset?: number;
             totalCount?: number;
         };
+        ParameterDTO: {
+            name: string;
+            type: string;
+        };
+        ParametersByStepDTO: components["schemas"]["ParameterStepDTO"][];
+        ParameterStepDTO: components["schemas"]["ParameterDTO"][];
         ProcessInstanceDTO: {
             category?: components["schemas"]["WorkflowCategoryDTO"];
             description?: string;
@@ -489,6 +512,38 @@ export interface operations {
                         /** @description Error message */
                         message?: string;
                     };
+                };
+            };
+        };
+    };
+    getParametersByStep: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Unique identifier of the workflow */
+                workflowId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful division of parameters */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParametersByStepDTO"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
                 };
             };
         };
