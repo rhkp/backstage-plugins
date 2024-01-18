@@ -145,6 +145,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v2/workflows/instances/{instanceId}/result": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get assessment results */
+        get: operations["getAssessmentResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v2/workflows/overview": {
         parameters: {
             query?: never;
@@ -211,9 +228,7 @@ export interface components {
             duration?: string;
             id?: string;
             name?: string;
-            nextWorkflowSuggestions?: {
-                [key: string]: components["schemas"]["WorkflowSuggestionDTO"] | undefined;
-            };
+            nextWorkflowSuggestions?: components["schemas"]["WorkflowSuggestionsDTO"];
             /** Format: date-time */
             started?: string;
             status?: components["schemas"]["ProcessInstanceStatusDTO"];
@@ -277,6 +292,9 @@ export interface components {
         WorkflowSuggestionDTO: {
             suggestion?: string;
             workflow?: string;
+        };
+        WorkflowSuggestionsDTO: {
+            [key: string]: components["schemas"]["WorkflowSuggestionDTO"] | undefined;
         };
     };
     responses: never;
@@ -611,6 +629,29 @@ export interface operations {
                         /** @description Error message */
                         message?: string;
                     };
+                };
+            };
+        };
+    };
+    getAssessmentResults: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the assessment workflow */
+                assessmentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowSuggestionsDTO"];
                 };
             };
         };
