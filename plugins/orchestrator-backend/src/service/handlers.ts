@@ -3,6 +3,7 @@ import moment from 'moment';
 import {
   getWorkflowCategoryDTO,
   ProcessInstance,
+  ProcessInstanceDTO,
   ProcessInstanceState,
   ProcessInstanceStatusDTO,
   ProcessIntancesDTO,
@@ -195,32 +196,60 @@ export async function getInstancesV2(
   dataIndexService: DataIndexService,
 ): Promise<ProcessIntancesDTO> {
   const instances = await getInstancesV1(dataIndexService);
-  const result = instances.map((def: ProcessInstance) => {
-    const start = moment(def.start?.toString());
-    const end = moment(def.end?.toString());
-    const duration = moment.duration(start.diff(end));
-
-    let variables: Record<string, unknown> | undefined;
-    if (typeof def?.variables === 'string') {
-      variables = JSON.parse(def?.variables);
-    } else {
-      variables = def?.variables;
-    }
-    return {
-      category: getWorkflowCategoryDTOFromWorkflowCategory(def.category),
-      description: def.description,
-      duration: duration.humanize(),
-      id: def.id,
-      name: def.processName,
-      // @ts-ignore
-      nextWorkflowSuggestions: variables?.workflowdata?.workflowOptions,
-      started: start.toDate().toLocaleString(),
-      status: getProcessInstancesDTOFromString(def.state),
-      workflow: def.processName || def.processId,
-    };
-  });
+  const result = instances.map(def => mapToProcessInstanceDTO(def));
 
   return result;
+}
+
+export async function getInstancesByIdV1(
+  dataIndexService: DataIndexService,
+  instanceId: string,
+): Promise<ProcessInstance> {
+  const instance = await dataIndexService.fetchProcessInstance(instanceId);
+
+  if (!instance) {
+    throw new Error(`Couldn't fetch process instance ${instanceId}`);
+  }
+  return instance;
+}
+
+export async function getInstancesByIdV2(
+  dataIndexService: DataIndexService,
+  instanceId: string,
+): Promise<ProcessInstanceDTO> {
+  const instance: ProcessInstance = await getInstancesByIdV1(
+    dataIndexService,
+    instanceId,
+  );
+  return mapToProcessInstanceDTO(instance);
+}
+
+function mapToProcessInstanceDTO(
+  processInstance: ProcessInstance,
+): ProcessInstanceDTO {
+  const start = moment(processInstance.start?.toString());
+  const end = moment(processInstance.end?.toString());
+  const duration = moment.duration(start.diff(end));
+  let variables: Record<string, unknown> | undefined;
+  if (typeof processInstance?.variables === 'string') {
+    variables = JSON.parse(processInstance?.variables);
+  } else {
+    variables = processInstance?.variables;
+  }
+  return {
+    category: getWorkflowCategoryDTOFromWorkflowCategory(
+      processInstance.category,
+    ),
+    description: processInstance.description,
+    duration: duration.humanize(),
+    id: processInstance.id,
+    name: processInstance.processName,
+    // @ts-ignore
+    nextWorkflowSuggestions: variables?.workflowdata?.workflowOptions,
+    started: start.toDate().toLocaleString(),
+    status: getProcessInstancesDTOFromString(processInstance.state),
+    workflow: processInstance.processName || processInstance.processId,
+  };
 }
 
 export async function getWorkflowStatuses(): Promise<WorkflowRunStatusDTO[]> {

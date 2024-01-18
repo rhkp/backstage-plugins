@@ -6,8 +6,8 @@ export type WorkflowOverviewDTO = components['schemas']['WorkflowOverviewDTO'];
 export type WorkflowDTO = components['schemas']['WorkflowDTO'];
 export type WorkflowListResultDTO =
   components['schemas']['WorkflowListResultDTO'];
-export type ProcessIntanceDTO = components['schemas']['ProcessIntanceDTO'];
-export type ProcessIntancesDTO = components['schemas']['ProcessIntancesDTO'];
+export type ProcessInstanceDTO = components['schemas']['ProcessInstanceDTO'];
+export type ProcessIntancesDTO = components['schemas']['ProcessInstancesDTO'];
 export type ProcessInstanceStatusDTO2 =
   components['schemas']['ProcessInstanceStatusDTO'];
 export type WorkflowRunStatusDTO =

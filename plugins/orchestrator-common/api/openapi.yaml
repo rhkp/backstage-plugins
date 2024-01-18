@@ -175,9 +175,37 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProcessIntancesDTO'
+                $ref: '#/components/schemas/ProcessInstancesDTO'
         500:
           description: Error fetching instances
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+  /v2/workflows/instances/{instanceId}:
+    get:
+      summary: Get Workflow Instance by ID
+      operationId: getInstanceById
+      parameters:
+        - name: instanceId
+          in: path
+          required: true
+          description: ID of the workflow instance
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessInstanceDTO'
+        '500':
+          description: Internal Server Error
           content:
             application/json:
               schema:
@@ -350,11 +378,11 @@ components:
       x-enum-descriptions:
         - Assessment Workflow
         - Infrastructure Workflow
-    ProcessIntancesDTO:
+    ProcessInstancesDTO:
       type: array
       items:
-        $ref: '#/components/schemas/ProcessIntanceDTO'
-    ProcessIntanceDTO:
+        $ref: '#/components/schemas/ProcessInstanceDTO'
+    ProcessInstanceDTO:
       type: object
       properties:
         id:
