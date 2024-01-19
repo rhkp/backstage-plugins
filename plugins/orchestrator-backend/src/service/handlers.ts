@@ -4,9 +4,9 @@ import {
   getWorkflowCategoryDTO,
   ProcessInstance,
   ProcessInstanceDTO,
+  ProcessInstancesDTO,
   ProcessInstanceState,
   ProcessInstanceStatusDTO,
-  ProcessIntancesDTO,
   WorkflowCategory,
   WorkflowCategoryDTO,
   WorkflowDefinition,
@@ -194,7 +194,7 @@ export async function getInstancesV1(
 
 export async function getInstancesV2(
   dataIndexService: DataIndexService,
-): Promise<ProcessIntancesDTO> {
+): Promise<ProcessInstancesDTO> {
   const instances = await getInstancesV1(dataIndexService);
   const result = instances.map(def => mapToProcessInstanceDTO(def));
 
