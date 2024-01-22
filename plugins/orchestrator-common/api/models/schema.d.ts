@@ -179,24 +179,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v2/workflows/overview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Get a list of workflow overviews */
-        get: operations["getWorkflowsOverview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/workflows/run/statuses": {
+    "/v2/workflows/instances/statuses": {
         parameters: {
             query?: never;
             header?: never;
@@ -208,6 +191,23 @@ export interface paths {
          * @description Retrieve an array of workflow statuses as string
          */
         get: operations["getWorkflowStatuses"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/workflows/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get a list of workflow overviews */
+        get: operations["getWorkflowsOverview"];
         put?: never;
         post?: never;
         delete?: never;
@@ -747,6 +747,26 @@ export interface operations {
             };
         };
     };
+    getWorkflowStatuses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunStatusDTO"][];
+                };
+            };
+        };
+    };
     getWorkflowsOverview: {
         parameters: {
             query?: never;
@@ -775,26 +795,6 @@ export interface operations {
                         /** @description Error message */
                         message?: string;
                     };
-                };
-            };
-        };
-    };
-    getWorkflowStatuses: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkflowRunStatusDTO"][];
                 };
             };
         };

@@ -232,7 +232,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WorkflowSuggestionsDTO'
-  /v2/workflows/run/statuses:
+  /v2/workflows/instances/statuses:
     get:
       operationId: getWorkflowStatuses
       summary: Get workflow status list
