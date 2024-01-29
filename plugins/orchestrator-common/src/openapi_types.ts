@@ -8,8 +8,10 @@ export type WorkflowListResultDTO =
   components['schemas']['WorkflowListResultDTO'];
 export type ProcessInstanceDTO = components['schemas']['ProcessInstanceDTO'];
 export type ProcessInstancesDTO = components['schemas']['ProcessInstancesDTO'];
-export type WorkflowRunStatusDTO =
-  components['schemas']['WorkflowRunStatusDTO'];
+export type ExecuteWorkflowRequestDTO =
+  components['schemas']['ExecuteWorkflowRequestDTO'];
+export type ExecuteWorkflowResponseDTO =
+  components['schemas']['ExecuteWorkflowResponseDTO'];
 
 // FIX ME
 export enum ProcessInstanceStatusDTO {

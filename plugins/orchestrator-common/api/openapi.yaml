@@ -295,7 +295,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExecuteWorkflowResponse'
+                $ref: '#/components/schemas/ExecuteWorkflowResponseDTO'
         '500':
           description: Internal Server Error
           content:
@@ -544,7 +544,7 @@ components:
             type: string
       required:
         - inputData
-    ExecuteWorkflowResponse:
+    ExecuteWorkflowResponseDTO:
       type: object
       properties:
         id:

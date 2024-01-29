@@ -246,7 +246,7 @@ export interface components {
                 [key: string]: string | undefined;
             };
         };
-        ExecuteWorkflowResponse: {
+        ExecuteWorkflowResponseDTO: {
             id?: string;
         };
         NodeInstanceDTO: {
@@ -597,7 +597,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ExecuteWorkflowResponse"];
+                    "application/json": components["schemas"]["ExecuteWorkflowResponseDTO"];
                 };
             };
             /** @description Internal Server Error */
