@@ -11,6 +11,7 @@ import {
   ProcessInstanceStatusDTO,
   WorkflowCategory,
   WorkflowCategoryDTO,
+  WorkflowDataDTO,
   WorkflowDefinition,
   WorkflowDTO,
   WorkflowExecutionResponse,
@@ -82,6 +83,36 @@ export async function executeWorkflowByIdV1(
     throw new Error(`Couldn't execute workflow ${workflowId}`);
   }
   return executionResponse;
+}
+
+export async function getWorkflowResultsByInstanceIdV2(
+  dataIndexService: DataIndexService,
+  instanceId: string,
+): Promise<WorkflowDataDTO> {
+  if (!instanceId) {
+    throw new Error(`No instance id was provided to get workflow results`);
+  }
+  if (!dataIndexService) {
+    throw new Error(
+      `No data index service provided for executing workflow with id ${instanceId}`,
+    );
+  }
+
+  const instanceResult = await getInstancesByIdV1(dataIndexService, instanceId);
+
+  if (instanceResult?.category !== WorkflowCategory.ASSESSMENT) {
+    throw new Error(
+      `Error: the workflow instance with instance id ${instanceId} is not of assessment type`,
+    );
+  }
+
+  if (!instanceResult?.variables) {
+    throw new Error(
+      'Error getting workflow instance results with id ' + instanceId,
+    );
+  }
+
+  return mapToGetWorkflowInstanceResults(instanceResult.variables);
 }
 
 export async function executeWorkflowByIdV2(
@@ -410,4 +441,27 @@ function mapToExecuteWorkflowResponseDTO(
   return {
     id: workflowExecutionResponse.id,
   };
+}
+
+function mapToGetWorkflowInstanceResults(
+  variables: string | Record<string, unknown>,
+): WorkflowDataDTO {
+  if (typeof variables === 'string') {
+    return {
+      variables: variables,
+    };
+  }
+
+  let returnObject = {};
+  if (variables?.workflowdata) {
+    returnObject = {
+      ...variables.workflowdata,
+    };
+  } else {
+    returnObject = {
+      workflowoptions: [],
+    };
+  }
+
+  return returnObject;
 }

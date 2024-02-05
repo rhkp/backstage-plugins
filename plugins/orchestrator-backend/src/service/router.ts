@@ -33,6 +33,7 @@ import {
   getWorkflowOverviewById,
   getWorkflowOverviewV1,
   getWorkflowOverviewV2,
+  getWorkflowResultsByInstanceIdV2,
   getWorkflowSpecsV2,
   getWorkflowStatuses,
   getWorkflowsV1,
@@ -262,6 +263,23 @@ function setupInternalRoutes(
 
     res.status(200).json(result.data);
   });
+
+  // v2
+  api.register(
+    'getAssessmentResults',
+    async (c, _req: express.Request, res: express.Response) => {
+      const instanceId = c.request.params.instanceId as string;
+
+      await getWorkflowResultsByInstanceIdV2(
+        services.dataIndexService,
+        instanceId,
+      )
+        .then(result => res.status(200).json(result))
+        .catch((error: { message: string }) => {
+          res.status(500).send(error.message || 'Internal Server Error');
+        });
+    },
+  );
 
   router.post('/workflows/:workflowId/execute', async (req, res) => {
     const {

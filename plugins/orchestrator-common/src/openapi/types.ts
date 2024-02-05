@@ -18,8 +18,9 @@ export type ExecuteWorkflowResponseDTO =
   components['schemas']['ExecuteWorkflowResponseDTO'];
 export type WorkflowSuggestionDTO =
   components['schemas']['WorkflowSuggestionDTO'];
+export type WorkflowDataDTO = components['schemas']['WorkflowDataDTO'];
 
-  // Generate ts enum instead of strings union
+// Generate ts enum instead of strings union
 // https://issues.redhat.com/browse/FLPATH-947
 export enum WorkflowCategoryDTO {
   // Assessment Workflow
