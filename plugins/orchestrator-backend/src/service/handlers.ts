@@ -100,12 +100,6 @@ export async function getWorkflowResultsByInstanceIdV2(
 
   const instanceResult = await getInstancesByIdV1(dataIndexService, instanceId);
 
-  if (instanceResult?.category !== WorkflowCategory.ASSESSMENT) {
-    throw new Error(
-      `Error: the workflow instance with instance id ${instanceId} is not of assessment type`,
-    );
-  }
-
   if (!instanceResult?.variables) {
     throw new Error(
       'Error getting workflow instance results with id ' + instanceId,
