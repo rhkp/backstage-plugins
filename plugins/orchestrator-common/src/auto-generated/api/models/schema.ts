@@ -119,6 +119,9 @@ export interface components {
       status?: components['schemas']['ProcessInstanceStatusDTO'];
       /** Format: date-time */
       started?: string;
+      /** Format: date-time */
+      ended?: string;
+      /** Format: duration */
       duration?: string;
       category?: components['schemas']['WorkflowCategoryDTO'];
       description?: string;

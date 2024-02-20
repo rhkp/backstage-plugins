@@ -1288,11 +1288,17 @@ endif::internal-generation[]
 | 
 | date-time 
 
+| ended
+| 
+| Date 
+| 
+| date-time 
+
 | duration
 | 
 | String 
 | 
-|  
+| duration 
 
 | category
 | 

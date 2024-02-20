@@ -644,8 +644,13 @@ const OPENAPI = `
             "type": "string",
             "format": "date-time"
           },
+          "ended": {
+            "type": "string",
+            "format": "date-time"
+          },
           "duration": {
-            "type": "string"
+            "type": "string",
+            "format": "duration"
           },
           "category": {
             "$ref": "#/components/schemas/WorkflowCategoryDTO"
