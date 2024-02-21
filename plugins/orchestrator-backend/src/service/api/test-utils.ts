@@ -4,6 +4,8 @@ import {
   ProcessInstanceState,
   ProcessInstanceStateValues,
   WorkflowDefinition,
+  WorkflowExecutionResponse,
+  WorkflowInfo,
   WorkflowOverview,
   WorkflowOverviewListResult,
   WorkflowSpecFile,
@@ -54,6 +56,23 @@ export function generateTestWorkflowOverviewList(
   }
 
   return res;
+}
+
+export function generateTestWorkflowInfo(
+  id: string = 'test_workflowId',
+): WorkflowInfo {
+  return {
+    id: id,
+    serviceUrl: 'mock/serviceurl',
+  };
+}
+
+export function generateTestExecuteWorkflowResponse(
+  id: string = 'test_execId',
+): WorkflowExecutionResponse {
+  return {
+    id: id,
+  };
 }
 
 // Utility function to generate fake OpenAPIV3.Document

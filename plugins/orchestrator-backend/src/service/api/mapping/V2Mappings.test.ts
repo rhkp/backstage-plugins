@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   WorkflowOverview,
   WorkflowSpecFile,
@@ -5,14 +7,37 @@ import {
 
 import {
   fakeOpenAPIV3Document,
+  generateTestExecuteWorkflowResponse,
   generateTestWorkflowOverview,
   generateTestWorkflowSpecs,
 } from '../test-utils';
 import {
+  mapToExecuteWorkflowResponseDTO,
   mapToWorkflowOverviewDTO,
   mapToWorkflowSpecFileDTO,
   mapWorkflowCategoryDTOFromString,
 } from './V2Mappings';
+
+describe('scenarios to verify executeWorkflowResponseDTO', () => {
+  it('correctly maps positive scenario response', async () => {
+    const execWorkflowResp = generateTestExecuteWorkflowResponse();
+    const mappedValue = mapToExecuteWorkflowResponseDTO(
+      'test_workflowId',
+      execWorkflowResp,
+    );
+    expect(mappedValue).toBeDefined();
+    expect(mappedValue.id).toBeDefined();
+    expect(Object.keys(mappedValue).length).toBe(1);
+  });
+
+  it('throws error when no id attribute present in response', async () => {
+    expect(() => {
+      mapToExecuteWorkflowResponseDTO('workflowId', { id: '' });
+    }).toThrow(
+      `Error while mapping ExecuteWorkflowResponse to ExecuteWorkflowResponseDTO for workflow with id`,
+    );
+  });
+});
 
 describe('scenarios to verify mapToWorkflowOverviewDTO', () => {
   it('correctly maps WorkflowOverview', () => {

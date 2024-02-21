@@ -1,11 +1,13 @@
 import { mockServices } from '@backstage/backend-test-utils';
 
 import {
+  ExecuteWorkflowResponseDTO,
   WorkflowOverviewDTO,
   WorkflowOverviewListResultDTO,
   WorkflowSpecFile,
 } from '@janus-idp/backstage-plugin-orchestrator-common';
 
+import { DataIndexService } from '../DataIndexService';
 import { SonataFlowService } from '../SonataFlowService';
 import { WorkflowService } from '../WorkflowService';
 import {
@@ -13,6 +15,8 @@ import {
   mapToWorkflowSpecFileDTO,
 } from './mapping/V2Mappings';
 import {
+  generateTestExecuteWorkflowResponse,
+  generateTestWorkflowInfo,
   generateTestWorkflowOverview,
   generateTestWorkflowOverviewList,
   generateTestWorkflowSpecs,
@@ -25,7 +29,13 @@ jest.mock('../SonataFlowService', () => ({
 }));
 
 jest.mock('../DataIndexService', () => ({
+  DataIndexService: jest.fn(),
   getWorkflowDefinitions: jest.fn(),
+  getWorkflowDefinition: jest.fn(),
+}));
+
+jest.mock('../Helper.ts', () => ({
+  retryAsyncFunction: jest.fn(),
 }));
 
 // Helper function to create a mock SonataFlowService instance
@@ -41,6 +51,7 @@ const createMockSonataFlowService = (): SonataFlowService => {
   mockSonataFlowService.fetchWorkflowOverview = jest.fn();
   mockSonataFlowService.fetchWorkflowDefinition = jest.fn();
   mockSonataFlowService.fetchWorkflowUri = jest.fn();
+  mockSonataFlowService.executeWorkflow = jest.fn();
 
   return mockSonataFlowService;
 };
@@ -57,6 +68,15 @@ const createMockWorkflowService = (): WorkflowService => {
   mockWorkflowService.listStoredSpecs = jest.fn();
 
   return mockWorkflowService;
+};
+
+const createMockDataIndexService = (): DataIndexService => {
+  const mockDataIndexService = new DataIndexService({} as any, {} as any);
+
+  mockDataIndexService.getWorkflowDefinitions = jest.fn();
+  mockDataIndexService.getWorkflowDefinition = jest.fn();
+
+  return mockDataIndexService;
 };
 
 describe('getWorkflowOverview', () => {
@@ -322,5 +342,48 @@ describe('getWorkflowById', () => {
     expect(workflowV2.description).toEqual(wfDefinition.description);
     expect(workflowV2.category).toEqual('infrastructure');
     expect(workflowV2.annotations).toBeUndefined();
+  });
+});
+
+describe('executeWorkflow', () => {
+  let mockSonataFlowService: SonataFlowService;
+  let mockDataIndexService: DataIndexService;
+  beforeEach(async () => {
+    jest.clearAllMocks();
+    // Mock SonataFlowService instance
+    mockSonataFlowService = createMockSonataFlowService();
+    mockDataIndexService = createMockDataIndexService();
+  });
+  it('executes a given workflow', async () => {
+    // Arrange
+    const workflowInfo = generateTestWorkflowInfo();
+    const execResponse = generateTestExecuteWorkflowResponse();
+    (mockDataIndexService.getWorkflowDefinition as jest.Mock).mockResolvedValue(
+      workflowInfo,
+    );
+
+    (mockSonataFlowService.executeWorkflow as jest.Mock).mockResolvedValue(
+      execResponse,
+    );
+    const workflowData = {
+      inputData: {
+        customAttrib: 'My customAttrib',
+      },
+    };
+
+    // Act
+    const actualResultV2: ExecuteWorkflowResponseDTO = await V2.executeWorkflow(
+      mockDataIndexService,
+      mockSonataFlowService,
+      workflowData,
+      workflowInfo.id,
+      'businessKey',
+    );
+
+    // Assert
+    expect(actualResultV2).toBeDefined();
+    expect(actualResultV2.id).toBeDefined();
+    expect(actualResultV2.id).toEqual(execResponse.id);
+    expect(actualResultV2).toEqual(execResponse);
   });
 });
