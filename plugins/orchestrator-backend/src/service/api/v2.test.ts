@@ -2,6 +2,7 @@ import { mockServices } from '@backstage/backend-test-utils';
 
 import {
   ExecuteWorkflowResponseDTO,
+  WorkflowDataDTO,
   WorkflowOverviewDTO,
   WorkflowOverviewListResultDTO,
   WorkflowSpecFile,
@@ -10,7 +11,9 @@ import {
 import { DataIndexService } from '../DataIndexService';
 import { SonataFlowService } from '../SonataFlowService';
 import { WorkflowService } from '../WorkflowService';
+import assessedProcessInstanceData from './mapping/__fixtures__/assessedProcessInstance.json';
 import {
+  mapToGetWorkflowInstanceResults,
   mapToWorkflowOverviewDTO,
   mapToWorkflowSpecFileDTO,
 } from './mapping/V2Mappings';
@@ -32,6 +35,7 @@ jest.mock('../DataIndexService', () => ({
   DataIndexService: jest.fn(),
   getWorkflowDefinitions: jest.fn(),
   getWorkflowDefinition: jest.fn(),
+  fetchProcessInstance: jest.fn(),
 }));
 
 jest.mock('../Helper.ts', () => ({
@@ -75,9 +79,84 @@ const createMockDataIndexService = (): DataIndexService => {
 
   mockDataIndexService.getWorkflowDefinitions = jest.fn();
   mockDataIndexService.getWorkflowDefinition = jest.fn();
+  mockDataIndexService.fetchProcessInstance = jest.fn();
 
   return mockDataIndexService;
 };
+
+describe('getWorkflowResults', () => {
+  let mockDataIndexService: DataIndexService;
+  beforeEach(async () => {
+    jest.clearAllMocks();
+    mockDataIndexService = createMockDataIndexService();
+  });
+
+  it('returns process instance', async () => {
+    // Arrange
+    const mockGetWorkflowResultsV1 = { ...assessedProcessInstanceData };
+
+    (mockDataIndexService.fetchProcessInstance as jest.Mock).mockResolvedValue(
+      mockGetWorkflowResultsV1.instance,
+    );
+
+    const expectedResultV2 = mapToGetWorkflowInstanceResults(
+      // @ts-ignore
+      mockGetWorkflowResultsV1.instance.variables,
+    );
+
+    // Act
+    const actualResultV2: WorkflowDataDTO = await V2.getWorkflowResults(
+      mockDataIndexService,
+      'testInstanceId',
+    );
+
+    // Assert
+    expect(actualResultV2).toBeDefined();
+    expect(actualResultV2).toEqual(expectedResultV2);
+  });
+
+  it('throws error when no variables attribute is present in the instance object', async () => {
+    // Arrange
+    const mockGetWorkflowResultsV1 = { ...assessedProcessInstanceData };
+
+    // @ts-ignore
+    delete mockGetWorkflowResultsV1.instance.variables;
+
+    (mockDataIndexService.fetchProcessInstance as jest.Mock).mockResolvedValue(
+      mockGetWorkflowResultsV1,
+    );
+
+    // Act
+    const promise = V2.getWorkflowResults(mockDataIndexService, 'instanceId');
+
+    // Assert
+    await expect(promise).rejects.toThrow(
+      'Error getting workflow instance results with id instanceId',
+    );
+  });
+
+  it('throws error when no instanceId is provided', async () => {
+    const promise = V2.getWorkflowResults(mockDataIndexService, '');
+
+    // Assert
+    await expect(promise).rejects.toThrow(
+      'No instance id was provided to get workflow results',
+    );
+  });
+
+  it('throws error when no dataIndexService is provided', async () => {
+    const promise = V2.getWorkflowResults(
+      // @ts-ignore
+      null,
+      'testInstanceId',
+    );
+
+    // Assert
+    await expect(promise).rejects.toThrow(
+      'No data index service provided for executing workflow with id',
+    );
+  });
+});
 
 describe('getWorkflowOverview', () => {
   let mockSonataFlowService: SonataFlowService;
