@@ -15,7 +15,7 @@ import {
 
 const baseDate = new Date('2023-02-19T11:45:21.123Z');
 const HOUR = 60 * 60 * 1000;
-const DAY = 24 * HOUR;
+
 interface WorkflowOverviewParams {
   suffix?: string;
   workflowId?: string;
@@ -136,7 +136,6 @@ export function generateProcessInstance(id: number): ProcessInstance {
     state: ProcessInstanceState.Active,
     start: baseDate,
     end: new Date(baseDate.getTime() + 1 * HOUR),
-    lastUpdate: new Date(baseDate.getTime() + DAY),
     nodes: [],
     endpoint: 'enpoint/foo',
     serviceUrl: 'service/bar',
